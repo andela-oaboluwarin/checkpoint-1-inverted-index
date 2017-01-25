@@ -1,38 +1,43 @@
-// include gulp
+/* global require: true */
+
 const gulp = require('gulp');
-
-//include gulp utilities to show gulp is running
-const gutil = require('gulp-util');
-
-// include plug-ins
-const browserSync = require('browser-sync');
-const browserify = require('browserify');
-
+const browserSync = require('browser-sync').create();
+const jasmineBrowser = require('gulp-jasmine-browser');
+const eslint = require('gulp-eslint');
 
 // Default tasks
-gulp.task('gutil', function() {
-  return gutil.log('GULP IS UP AND RUNNING!!!')
-});
+gulp.task('default', ['browserSync', 'lint', 'specs']);
 
-gulp.task('default', ['gutil', 'browser-sync', 'browserify', 'watch']);
 
-//Browser-sync task
-gulp.task('browser-sync', () => {
+// Browser Sync task
+gulp.task('browserSync', () => {
   browserSync.init({
-    server: './',
-    port: process.env.PORT || 5000
+    server: {
+      baseDir: 'src',
+      index: 'inverted-index.html'
+    },
+    port: 8080
+
   });
 });
 
-//reload task
-gulp.task('reload', () => {
-  browserSync.reload();
+// eslint task
+gulp.task('lint', () => {
+  gulp.src(['src/**/**.js', 'jasmine/spec/inverted-index-test.js'])
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
-//watch task
+// Watch Task
 gulp.task('watch', () => {
-  gulp.watch(['./src/*.js', '/jasmine/spec/inverted-index-test.js'],
-    ['reload']);
-  gulp.watch('./src/*.css', ['reload']);
-  gulp.watch('./*.html', ['reload']);
+  gulp.watch('**/**.css', browserSync.reload);
+  gulp.watch('**/**.html', browserSync.reload);
+  gulp.watch(['./src/*.js', './jasmine/spec/*.js'], browserSync.reload);
 });
+
+// Jasmine task
+gulp.task('specs', () => {
+  gulp.src(['src/**/**.js', 'jasmine/spec/inverted-index-test.js'])
+    .pipe(jasmineBrowser().browserSync.reload);
+});
+
