@@ -25,6 +25,14 @@ const goodBooks = `[
 const newIndex = new InvertedIndex();
 const emptyBook = [];
 
+// Inverted Index test suite
+describe('Inverted Index Suite', () => {
+  //Define variables to be used in the test Suite
+  const newIndex = new InvertedIndex();
+  const emptyBook = [];
+  const sampleSentence = 'This be an %example of the #typical be sentence type.';
+  const multipleSearch = 'Obama left on a high';
+  newIndex.createIndex(books);
 
 // Inverted Index class test suite
 describe('Class Inverted Index', () => {

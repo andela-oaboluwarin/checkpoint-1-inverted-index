@@ -1,3 +1,5 @@
+/* eslint no-undef:0 */
+/* eslint no-unused-vars:0 */
 /**
  * Inverted index class
  */
@@ -42,7 +44,7 @@ class InvertedIndex {
     if (fileLength === 0) {
       return 'JSON file is Empty';
     }
-    fileToIndex.forEach((document) => {
+    [...fileToIndex].forEach((document) => {
       if (document.text) {
         wordsToIndex
           .push(`${document.title.toLowerCase()} ${document.text
@@ -50,9 +52,9 @@ class InvertedIndex {
       }
     });
     const distinctContent = InvertedIndex.distinctWords(wordsToIndex.join(' '));
-    distinctContent.forEach((word) => {
+    [...distinctContent].forEach((word) => {
       index[word] = [];
-      wordsToIndex.forEach((document, indexPosition) => {
+      [...wordsToIndex].forEach((document, indexPosition) => {
         if (document.indexOf(word) > -1) {
           index[word].push(indexPosition);
         }
@@ -78,7 +80,7 @@ class InvertedIndex {
   searchIndex(searchWords, indexToSearch) {
     const searchResults = {};
     const searchTerms = InvertedIndex.distinctWords(searchWords);
-    searchTerms.forEach((word) => {
+    [...searchTerms].forEach((word) => {
       if (indexToSearch[word]) {
         searchResults[word] = indexToSearch[word];
       } else {
@@ -86,6 +88,7 @@ class InvertedIndex {
           `Oops! Sorry, ${word} does not exist in file`;
       }
     });
+    this.searchResults = searchResults;
     return searchResults;
   }
 
