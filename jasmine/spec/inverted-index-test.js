@@ -1,54 +1,48 @@
-'use strict';
+/* eslint no-undef:0 */
+const books = `[
+  {
+    "title": "The Great Debaters",
+    "text": "Denzel Washington stars as an educator and activist in a racially plagued community, leading his four brightest students on a debating conquest across the country."
+  },
 
-const books = require('./books');
-const books_2 = require('./books_2');
+  {
+    "title": "Prison Break",
+    "text": "Michael Scofield embarks on a thrilling adventure of mind-blowing escapes from detention in this gripping tale of wits, relationships, and self-serving inmates."
+  }
+]`;
 
-// A test suite to read book data
-describe('Inverted Index Suite', () => {
-  //Define variables to be used in the test Suite
-  const newIndex = new InvertedIndex();
-  const emptyBook = [];
-  const sampleSentence = 'This be an %example of the #typical be sentence type.';
-  const multipleSearch = 'Obama left on a high';
-  newIndex.createIndex(books);
+const goodBooks = `[
+  {
+    "title": "Alice in Wonderland",
+    "text": "Alice falls into a rabbit hole and enters a world full of imagination."
+  },
+  {
+    "title": "The Lord of the Rings: The Fellowship of the Ring.",
+    "text": "An unusual alliance of man, elf, dwarf, wizard and hobbit seek to destroy a powerful ring."
+  }
+]`;
 
-  describe('Class Inverted Index', () => {
-    it('should be a class', () => {
-      expect(newIndex instanceof InvertedIndex).toBe(true);
-      expect(newIndex instanceof Object).toBe(true);
-      expect(typeof (newIndex)).toBe('object');
-    });
+const newIndex = new InvertedIndex();
+const emptyBook = [];
+
+
+// Inverted Index class test suite
+describe('Class Inverted Index', () => {
+  it('should be a class', () => {
+    expect(newIndex instanceof InvertedIndex).toBe(true);
+    expect(newIndex instanceof Object).toBe(true);
+    expect(typeof (newIndex)).toBe('object');
   });
 
-  describe('Get Tokens String', () => {
-    it('should be available in class InvertedIndex', () => {
-      expect(InvertedIndex.getTokens).toBeDefined();
-    });
-    it('should return an array containing alphabets only', () => {
-      expect(InvertedIndex.getTokens(sampleSentence)).not.toContain('%');
-    });
-    it('should return an array containing the correct number of words', () => {
-      expect(InvertedIndex.getTokens(sampleSentence).length).toBe(10);
-    });
-  });
-
-  describe('Distinct Words', () => {
-    it('should be available in class InvertedIndex', () => {
-      expect(InvertedIndex.distinctWords).toBeDefined();
-    });
-    it('should return an array of words without duplicates', () => {
-      expect(InvertedIndex.distinctWords(sampleSentence).length).toBe(9);
-    });
-  });
-
-  describe('Read File Data', () => {
+  // Book Data Test Suite
+  describe('Read Book Data', () => {
     it('should have createIndex available in class InvertedIndex', () => {
       expect(newIndex.createIndex).toBeDefined();
     });
     it('should ensure the JSON file is not empty', () => {
       expect(newIndex.createIndex(emptyBook)).toBe('JSON file is Empty');
       expect(newIndex.createIndex(books)).not.toBe('JSON file is Empty');
-      expect(newIndex.createIndex(books_2)).not.toBe('JSON file is Empty');
+      expect(newIndex.createIndex(goodBooks)).not.toBe('JSON file is Empty');
     });
   });
 
@@ -68,24 +62,22 @@ describe('Inverted Index Suite', () => {
       expect(newIndex.searchIndex).toBeDefined();
     });
     it('should return correct index for each word', () => {
-      expect(newIndex.searchIndex('debaters', newIndex.getIndex())).toEqual({
-        'debaters': [0]
+      expect(newIndex.searchIndex(debaters, newIndex.getIndex())).toEqual({
+        debaters: [0]
       });
-      expect(newIndex.searchIndex('on', newIndex.getIndex())).toEqual({
-        'on': [0, 1]
+      expect(newIndex.searchIndex(on, newIndex.getIndex())).toEqual({
+        on: [0, 1]
       });
-      expect(newIndex.searchIndex('discombobulated', newIndex.getIndex())).toEqual({
-        'discombobulated': 'We are Sorry but discombobulated is not found in our database'
+      expect(newIndex.searchIndex(discombobulated, newIndex.getIndex())).toEqual({
+        discombobulated: 'We are Sorry but discombobulated is not found in our database'
       });
       expect(newIndex.searchIndex(multipleSearch, newIndex.getIndex()))
         .toEqual({
-          'debaters': [0],
-          'social': 'We are Sorry but social is not found in our database',
-          'tale': [1],
-          'and': [0, 1]
+          debaters: [0],
+          social: 'We are Sorry but social is not found in our database',
+          tale: [1],
+          and: [0, 1]
         });
     });
   });
-
 });
-
