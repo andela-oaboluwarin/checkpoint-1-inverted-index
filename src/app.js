@@ -7,16 +7,15 @@ const indexApp = angular
     const newIndex = new InvertedIndex();
     /**
      *@returns {string} msg - Error message
-    * @param {string}  msg - Error message
+    * @param {string} msg - Error message
     */
     function setMessage(msg) {
       $scope.$apply(() => {
         $scope.uploadError = msg;
       });
     }
-    $scope.testing = 'Useless';
     $scope.uploadFile = () => {
-      // Set index & search results
+      // Set index & search results to an initial off position.
       $scope.validSearch = false;
       $scope.indexExists = false;
       const thefile = document.getElementById('select-files').files[0];
