@@ -4,9 +4,10 @@ const jasmineBrowser = require('gulp-jasmine-browser');
 const eslint = require('gulp-eslint');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
+const run = require('gulp-run');
 
 // Default tasks
-gulp.task('default', ['browser-sync', 'browserify', 'watch']);
+gulp.task('default', ['browserSync', 'browserify', 'watch']);
 
 
 // Browser Sync task
@@ -48,3 +49,8 @@ gulp.task('browserify', () =>
     .pipe(source('test-spec.js'))
     .pipe(gulp.dest('./jasmine/spec/tests'))
 );
+
+// Test task
+gulp.task('test', ['browserify'], () => {
+  run('node_modules/karma/bin/karma start karma.conf.js --single-run').exec();
+});
