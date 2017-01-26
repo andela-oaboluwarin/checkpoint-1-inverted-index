@@ -1,3 +1,4 @@
 node_modules
 jasmine/spec/tests/test-spec.js
 karma.conf.js
+jasmine/lib
