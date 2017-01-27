@@ -38,7 +38,7 @@ git clone https://github.com/andela-oaboluwarin/checkpoint-1-inverted-index.git
 - Install all the dependencies with `npm install`  (It is assumed you have [Nodejs](nodejs.org) installed already):
 
 - Run Tests for the application with:
-  `npm test` (which is the test command defined in the package manager __package.json__)
+  `karma start` (which is the test command defined in the package manager __package.json__)
 
 - Start the Application with:
   `npm start` and gain access to the application interface on your browser via http://localhost:3000/
