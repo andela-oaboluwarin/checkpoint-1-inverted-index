@@ -4,8 +4,8 @@
   "description": "An app that returns the location of words from a JSON file containing JSON objects",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "gulp",
-    "test": "gulp test"
+    "start": "npm start",
+    "test": "npm test"
   },
   "repository": {
     "type": "git",
@@ -50,7 +50,6 @@
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
-    "gulp-jasmine-browser": "^1.7.1",
     "jasmine-core": "^2.5.2",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",

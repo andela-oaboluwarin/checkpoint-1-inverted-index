@@ -1,10 +1,8 @@
 const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
-const jasmineBrowser = require('gulp-jasmine-browser');
 const eslint = require('gulp-eslint');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
-const run = require('gulp-run');
 
 // Default tasks
 gulp.task('default', ['browserSync', 'browserify', 'watch']);
@@ -32,14 +30,8 @@ gulp.task('lint', () => {
 gulp.task('watch', () => {
   gulp.watch('**/**.css', browserSync.reload);
   gulp.watch('**/**.html', browserSync.reload);
-  gulp.watch(['./src/*.js', './jasmine/spec/*.js',
-    'gulpfile.js'], browserSync.reload);
-});
-
-// Jasmine task
-gulp.task('specs', () => {
-  gulp.src(['src/**/**.js', 'jasmine/spec/inverted-index-test.js'])
-    .pipe(jasmineBrowser().browserSync.reload);
+  gulp.watch(['./src/*.js', 'gulpfile.js'], browserSync.reload);
+  gulp.watch('./jasmine/spec/**/*.js', browserSync.reload);
 });
 
 // Browserify task
@@ -49,8 +41,3 @@ gulp.task('browserify', () =>
     .pipe(source('test-spec.js'))
     .pipe(gulp.dest('./jasmine/spec/tests'))
 );
-
-// Test task
-gulp.task('test', ['browserify'], () => {
-  run('node_modules/karma/bin/karma start karma.conf.js --single-run').exec();
-});
