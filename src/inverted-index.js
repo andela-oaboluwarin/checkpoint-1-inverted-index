@@ -44,7 +44,7 @@ class InvertedIndex {
     if (fileLength === 0) {
       return 'JSON file is Empty';
     }
-    [...fileToIndex].forEach((document) => {
+    fileToIndex.forEach((document) => {
       if (document.text) {
         wordsToIndex
           .push(`${document.title.toLowerCase()} ${document.text
@@ -52,7 +52,7 @@ class InvertedIndex {
       }
     });
     const distinctContent = InvertedIndex.distinctWords(wordsToIndex.join(' '));
-    [...distinctContent].forEach((word) => {
+    distinctContent.forEach((word) => {
       index[word] = [];
       [...wordsToIndex].forEach((document, indexPosition) => {
         if (document.indexOf(word) > -1) {
@@ -60,7 +60,7 @@ class InvertedIndex {
         }
       });
     });
-    this.index = index;
+    this.index[fileToIndex] = index;
     return index;
   }
 

@@ -1,0 +1,23 @@
+/* navbar */
+.navbar-default {
+  background-color: dodgerblue;
+}
+
+.navbar-header {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    font-size: 35px;
+    font-stretch: expanded;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+button {
+  background-color: dodgerblue
+}
+
+body {
+  background-color: azure
+}
+

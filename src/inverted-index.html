@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="src/inverted-index.css">
+  <link rel="stylesheet" href="inverted-index.css"
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
   </script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
@@ -16,33 +17,30 @@
   <script type="text/javascript" src="inverted-index.js"></script>
   <script type="text/javascript" src="../jasmine/spec/inverted-index-test.js"></script>
 </head>
-<body style="background-color:blanchedalmond;" ng-app="InvertedIndex">
-  <div class="container-fluid">
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header" style="text-align: center">
-          <a class="navbar-brand" href="#">INVERTED INDEX APP</a>
-        </div>
-      </div>
-    </nav>
-  </div>
-  <div class="container-fluid" ng-controller="indexController">
+
+<body>
+  <nav class = "navbar navbar-default" role = "navigation">
+    <div class = "navbar-header" style="text-align: center">
+      <span>INVERTED INDEX</span>
+    </div>
+  </nav>
+  <main>
+  <div class="container-fluid" ng-app="InvertedIndex" ng-controller="indexController">
     <div class="row">
-    <div class="col-sm-4">
-      <br/><br/>
+      <div class="col-sm-4">
       <div>
       <form>
-        <input type="file" id="select-files" value="Import" accept="json"/>
+        <input type="file" id="select-files" multiple accept="json"/>
           <p style="height:15px;">
             <span data-ng-show="!uploadSuccess" id="error-paragraph" style="color:red; font-weight:bold">{{ uploadError }}</span>
             <span data-ng-show="uploadSuccess" id="success-paragraph" style="color:green; font-weight:bold">File Uploaded!</span>
           </p>
       </form>
       </div>
-      <br/><br/><br><br>
+      <br><br><br><br>
       <div>
         <button class="validate-import" id="import" ng-click="uploadFile()">
-            <span>UPLOAD SELECTED FILE</span>
+          <span>UPLOAD FILE</span>
         </button>
       </div>
       <br/><br/><br/><br/>
@@ -54,8 +52,7 @@
       <br/><br/><br/><br/>
       <div class="search-content">
         <form>
-          <input type="text" id="search-within-files" placeholder="Enter a word to search" ng-model="searchTerm"/>
-          <br/><br/>
+          <input type="text" id="search-within-files" placeholder="Enter word" ng-model="searchTerm"/>
           <button id="search-button" ng-click="searchInsideFile()">
             <span>SEARCH</span>
           </button>
@@ -75,7 +72,7 @@
             <tbody>
               <tr ng-repeat="(key,value) in indexObject">
                 <td style="text-align: center">{{ key }}</td>
-                <td ng-repeat="i in range" style="text-align: center"> <span ng-if="value.includes(i)"> &#x2705 </span></td>
+                <td ng-repeat="i in range" style="text-align: center"> <span ng-if="value.includes(i)" class="glyphicon glyphicon-remove"> </span></td>
               </tr>
             </tbody>
           </table>
@@ -94,7 +91,7 @@
             <tr ng-repeat="(key,value) in searchResults">
               <td style="text-align: center">{{ key }}</td>
               <td ng-repeat="i in range" style="text-align: center">
-                <span ng-if="value.includes(i)"> &#x2705 </span>
+                <span ng-if="value.includes(i)" class="glyphicon glyphicon-remove"> </span>
               </td>
             </tr>
           </tbody>
@@ -103,4 +100,5 @@
     </div>
   </div>
   </div>
+  </main>
 </body>
