@@ -60,7 +60,7 @@ class InvertedIndex {
         }
       });
     });
-    this.index[fileToIndex] = index;
+    this.index = index;
     return index;
   }
 
@@ -80,7 +80,7 @@ class InvertedIndex {
   searchIndex(searchWords, indexToSearch) {
     const searchResults = {};
     const searchTerms = InvertedIndex.distinctWords(searchWords);
-    [...searchTerms].forEach((word) => {
+    searchTerms.forEach((word) => {
       if (indexToSearch[word]) {
         searchResults[word] = indexToSearch[word];
       } else {
