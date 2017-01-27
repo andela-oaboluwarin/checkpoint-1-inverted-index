@@ -2,7 +2,7 @@
   "name": "inverted-index-master",
   "version": "1.0.0",
   "description": "An app that returns the location of words from a JSON file containing JSON objects",
-  "main": "gulpfile.js",
+  "main": "app.js",
   "scripts": {
     "start": "gulp default",
     "test": "karma start"
