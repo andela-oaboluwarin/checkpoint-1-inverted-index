@@ -58,7 +58,3 @@ git clone https://github.com/andela-oaboluwarin/checkpoint-1-inverted-index.git
 - AngularJs (For making features of the view responsive)
 - Bootstrap (For Styling the view)
 
-
-## Application Limitations
-
-

@@ -54,7 +54,7 @@ class InvertedIndex {
     const distinctContent = InvertedIndex.distinctWords(wordsToIndex.join(' '));
     distinctContent.forEach((word) => {
       index[word] = [];
-      [...wordsToIndex].forEach((document, indexPosition) => {
+      wordsToIndex.forEach((document, indexPosition) => {
         if (document.indexOf(word) > -1) {
           index[word].push(indexPosition);
         }
