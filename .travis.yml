@@ -13,6 +13,6 @@ before_install:
 after_script:
  - cat ./coverage/**/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
-addons:
-    code_climate:
-        repo_token: aeb35c62c464d1aca611432871f81a5827525f2f86735e8146207b9923ec4e3a
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < lcov.info
