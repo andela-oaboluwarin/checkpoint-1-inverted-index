@@ -12,7 +12,5 @@ before_install:
 
 after_script:
  - cat ./coverage/**/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+ - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
 
-after_success:
-  - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < lcov.info
