@@ -5,7 +5,7 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 
 // Default tasks
-gulp.task('default', ['browserSync', 'browserify', 'watch']);
+gulp.task('default', ['browserSync', 'watch']);
 
 
 // Browser Sync task
