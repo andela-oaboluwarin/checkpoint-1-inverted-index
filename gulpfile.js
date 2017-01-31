@@ -11,10 +11,7 @@ gulp.task('default', ['browserSync', 'watch']);
 // Browser Sync task
 gulp.task('browserSync', () => {
   browserSync.init({
-    server: {
-      baseDir: './src',
-      index: 'inverted-index.html'
-    },
+    server: './',
     port: process.env.PORT || 5000
   });
 });
