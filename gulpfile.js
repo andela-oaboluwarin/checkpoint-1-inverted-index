@@ -15,7 +15,7 @@ gulp.task('browserSync', () => {
       baseDir: './src',
       index: 'inverted-index.html'
     },
-    port: process.env.PORT || 8888
+    port: process.env.PORT || 5000
   });
 });
 
