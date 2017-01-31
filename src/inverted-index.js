@@ -1,3 +1,5 @@
+/* eslint no-undef:0 */
+/* eslint no-unused-vars:0 */
 /**
  * Inverted index class
  */
@@ -83,9 +85,10 @@ class InvertedIndex {
         searchResults[word] = indexToSearch[word];
       } else {
         searchResults[word] =
-          `Oops! Sorry, ${word} does not exist in file`;
+          `Sorry, ${word} is not a word present in this file`;
       }
     });
+    this.searchResults = searchResults;
     return searchResults;
   }
 

@@ -1,3 +1,29 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports=[
+  {
+    "title": "The Great Debaters",
+    "text": "Denzel Washington stars as an educator and activist in a racially plagued community, leading his four brightest students on a debating conquest across the country."
+  },
+
+  {
+    "title": "Prison Break",
+    "text": "Michael Scofield embarks on a thrilling adventure of mind-blowing escapes from detention in this gripping tale of wits, relationships, and self-serving inmates."
+  }
+]
+
+},{}],2:[function(require,module,exports){
+module.exports=[
+  {
+    "title": "Alice in Wonderland",
+    "text": "Alice falls into a rabbit hole and enters a world full of imagination."
+  },
+  {
+    "title": "The Fellowship of the Ring.",
+    "text": "An unusual alliance of man, elf, dwarf, wizard and hobbit seek to destroy a powerful ring."
+  }
+]
+
+},{}],3:[function(require,module,exports){
 /* eslint no-undef:0 */
 /* eslint no-unused-vars:0 */
 
@@ -12,7 +38,7 @@ describe('Inverted Index Suite', () => {
   const sampleSentence =
     'This be an %example of the #typical be sentence type.';
   const multipleSearch = 'Destroy world imagination quickly.';
-
+  newIndex.createIndex(books);
   newIndex.createIndex(goodBooks);
 
   // Inverted Index class test suite
@@ -100,3 +126,5 @@ describe('Inverted Index Suite', () => {
   });
 });
 
+
+},{"../books":1,"../goodBooks":2}]},{},[3]);

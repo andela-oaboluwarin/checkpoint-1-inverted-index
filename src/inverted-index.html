@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Inverted Index</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="src/inverted-index.css">
+  <link rel="stylesheet" href="inverted-index.css"
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+  </script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript" src="inverted-index.js"></script>
+  <script type="text/javascript" src="../jasmine/spec/inverted-index-test.js"></script>
+</head>
+
+<body>
+  <nav class = "navbar navbar-default" role = "navigation">
+    <div class = "navbar-header" style="text-align: center">
+      <span>INVERTED INDEX</span>
+    </div>
+  </nav>
+  <main>
+  <div class="container-fluid" ng-app="InvertedIndex" ng-controller="indexController">
+    <div class="row">
+      <div class="col-sm-4">
+      <div>
+      <form>
+        <input type="file" id="select-files" multiple accept="json"/>
+          <p style="height:15px;">
+            <span data-ng-show="!uploadSuccess" id="error-paragraph" style="color:red; font-weight:bold">{{ uploadError }}</span>
+            <span data-ng-show="uploadSuccess" id="success-paragraph" style="color:green; font-weight:bold">File Uploaded!</span>
+          </p>
+      </form>
+      </div>
+      <br><br><br><br>
+      <div>
+        <button class="validate-import" id="import" ng-click="uploadFile()">
+          <span>UPLOAD FILE</span>
+        </button>
+      </div>
+      <br/><br/><br/><br/>
+      <div>
+      <button id="index" ng-click="createIndex()">
+        <span>CREATE INDEX</span>
+      </button>
+      </div>
+      <br/><br/><br/><br/>
+      <div class="search-content">
+        <form>
+          <input type="text" id="search-within-files" placeholder="Enter word" ng-model="searchTerm"/>
+          <button id="search-button" ng-click="searchInsideFile()">
+            <span>SEARCH</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <!-- Table section.-->
+      <div id="index-table">
+          <table ng-if="uploadSuccess && indexExists" class="table table-bordered table-hover table-responsive">
+            <thead>
+              <tr>
+                <th> Words </th>
+                <th ng-repeat="i in range">{{ acceptedJsonFile[i].title }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(key,value) in indexObject">
+                <td style="text-align: center">{{ key }}</td>
+                <td ng-repeat="i in range" style="text-align: center"> <span ng-if="value.includes(i)" class="glyphicon glyphicon-remove"> </span></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div id="search-table">
+        <table class="table table-bordered table-hover table-responsive" ng-if="uploadSuccess && indexExists && validSearch">
+          <thead class="thead inverse">
+            <tr>
+              <th> Searched Word(s) </th>
+              <th ng-repeat="i in range">{{ acceptedJsonFile[i].title }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(key,value) in searchResults">
+              <td style="text-align: center">{{ key }}</td>
+              <td ng-repeat="i in range" style="text-align: center">
+                <span ng-if="value.includes(i)" class="glyphicon glyphicon-remove"> </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>
+  </main>
+</body>
