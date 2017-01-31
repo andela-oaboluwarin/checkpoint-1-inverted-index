@@ -4,7 +4,7 @@
   "description": "An app that returns the location of words from a JSON file containing JSON objects",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "gulp default",
+    "start": "gulp",
     "test": "karma start"
   },
   "repository": {

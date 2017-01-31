@@ -12,10 +12,10 @@ gulp.task('default', ['browserSync', 'watch']);
 gulp.task('browserSync', () => {
   browserSync.init({
     server: {
-      baseDir: 'src',
+      baseDir: './src',
       index: 'inverted-index.html'
     },
-    port: process.env.PORT || 5000
+    port: process.env.PORT || 8888
   });
 });
 
