@@ -30,7 +30,10 @@ An application that takes in a __JSON__ array of text objects, creates an index 
 
 ## Usage Instructions
 - Web use
+The application is hosted on heroku at the following address:
+[heroku app address] (https://inverted-index-oaboluwarin.herokuapp.com/)
 
+The buttons available on the user interface guide a user through the process.
 
 - Local Use
 ```
