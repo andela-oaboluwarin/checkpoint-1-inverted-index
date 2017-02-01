@@ -38,7 +38,7 @@ describe('Inverted Index Suite', () => {
   const sampleSentence =
     'This be an %example of the #typical be sentence type.';
   const multipleSearch = 'Destroy world imagination quickly.';
-  newIndex.createIndex(books);
+
   newIndex.createIndex(goodBooks);
 
   // Inverted Index class test suite

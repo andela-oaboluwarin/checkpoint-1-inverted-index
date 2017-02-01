@@ -5,16 +5,13 @@ const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 
 // Default tasks
-gulp.task('default', ['browserSync', 'browserify', 'watch']);
+gulp.task('default', ['browserSync', 'watch']);
 
 
 // Browser Sync task
 gulp.task('browserSync', () => {
   browserSync.init({
-    server: {
-      baseDir: 'src',
-      index: 'inverted-index.html'
-    },
+    server: './',
     port: process.env.PORT || 5000
   });
 });

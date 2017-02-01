@@ -1,5 +1,4 @@
-/* eslint no-undef:0 */
-/* eslint no-unused-vars:0 */
+/* eslint-disable no-unused-vars */
 /**
  * Inverted index class
  */
@@ -23,7 +22,7 @@ class InvertedIndex {
   }
 
   /**
-   * Methos that ensures words appear only once
+   * Method that ensures words appear only once
    * @param{String} words - The string to be filtered
    * @return{Array} tokens - Without duplicated words
    */
