@@ -65,5 +65,5 @@ git clone https://github.com/andela-oaboluwarin/checkpoint-1-inverted-index.git
 - Bootstrap (For Styling the view)
 
 ## Limitation:
-This current version of inverted-index does not support multiple uploads.
+It only allows for indexing of specifically formatted JSON files with the title and text keys.
 
