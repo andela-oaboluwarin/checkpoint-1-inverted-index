@@ -11,16 +11,16 @@ const invertedApp = angular
     $scope.uploadFile = () => {
       $scope.validSearch = false;
       $scope.indexExists = false;
-      $scope.theFile = document.getElementById('files').files[0];
-      if (!$scope.theFile) {
+      $scope.uploadedFile = document.getElementById('files').files[0];
+      if (!$scope.uploadedFile) {
         modalMessage('Select a file before uploading');
       }
-      if (!$scope.theFile.name.toLowerCase().match(/\.json$/)) {
+      if (!$scope.uploadedFile.name.toLowerCase().match(/\.json$/)) {
         $scope.uploadSuccess = false;
         modalMessage('This is not a JSON file.');
       }
       const reader = new FileReader();
-      reader.readAsText($scope.theFile);
+      reader.readAsText($scope.uploadedFile);
 
       reader.onload = (e) => {
         try {
@@ -42,7 +42,7 @@ const invertedApp = angular
 
     $scope.createIndex = () => {
       if ($scope.uploadSuccess) {
-        newIndex.createIndex($scope.theFile.name, $scope.filed);
+        newIndex.createIndex($scope.uploadedFile.name, $scope.filed);
         $scope.range = [];
         const filedLength = $scope.filed.length;
         for (let docIndex = 0; docIndex < filedLength; docIndex += 1) {
@@ -53,13 +53,13 @@ const invertedApp = angular
         $scope.indexExists = false;
         modalMessage('Upload a valid JSON file first.');
       }
-      $scope.indexObject = newIndex.getIndex($scope.theFile.name);
+      $scope.indexObject = newIndex.getIndex($scope.uploadedFile.name);
     };
     $scope.searchFile = () => {
       if ($scope.indexExists) {
-        $scope.searchItem = $scope.searchTerm;
+        $scope.searchItem = $scope.searchQuery;
         $scope.searchResults = newIndex
-          .searchIndex($scope.searchItem, $scope.theFile.name);
+          .searchIndex($scope.searchItem, $scope.uploadedFile.name);
         $scope.validSearch = true;
       } else {
         $scope.validSearch = false;

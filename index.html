@@ -29,10 +29,10 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h2 class="modal-title" id="myModalLabel">WARNING</h2>
+              <h2 class="modal-title" id="myModalLabel" style="text-align: center">WARNING</h2>
             </div>
             <div class="modal-body">
-              <h4>{{message}}</h4>
+              <h4 style="text-align: center">{{message}}</h4>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -50,23 +50,23 @@
         <br>
         <div class="row">
           <button type="button" class="btn btn-primary" id="upload-file" ng-click="uploadFile()">Upload File</button>
-          <div class="row">
-            <div class="table-display" ng-if="indexShown" ng-repeat="file in indexFile" id="display-index">
-            <br><br>
         <div class="row">
-          <h4>Created Index</h4>
+          <div class="table-display" ng-if="uploadSuccess && indexExists" id="display-index">
+          <br><br>
+        <div class="row">
+          <h4 style="text-align: center">Created Index</h4>
         <table class="table table-hover table-striped table-bordered table-responsive">
           <thead>
             <tr>
-              <th>Words</th>
-              <th ng-repeat="">Documents</th>
+              <th style="text-align: center">Words</th>
+              <th ng-repeat="i in range">{{ filed[i].title }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="">
-              <td>{{ key }}</td>
-              <td ng-repeat="">
-              <span class="glyphicon">&#xe013;</span>
+            <tr ng-repeat="(key, value) in indexObject">
+              <td style="text-align: center">{{ key }}</td>
+              <td ng-repeat="i in range" style="text-align: center">
+              <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
               </td>
             </tr>
           </tbody>
@@ -79,11 +79,11 @@
     <!-- Create Index Section -->
       <div class="col-md-4">
         <div class="row">
-        <h4>Create Index Section</h4>
+        <h4>Create Index Here</h4>
           <select class="browser-default" id="filenames">
             <option ng-if="!filed.length" disabled selected>Select file to index</option>
-            <option value="" ng-if="filed.length" disabled selected>Choose your file</option>
-            <option value="{{theFile.name}" ng-repeat="(title, text) in filed">{{theFile.name}}</option>
+            <option ng-if="filed.length" disabled selected>Choose your file</option>
+            <option>{{uploadedFile.name}}</option>
           </select>
         </div>
         <br>
@@ -98,8 +98,7 @@
           <form id="custom-search-form" class="form-search form-horizontal">
             <div class="input-append span15">
               <input type="text" class="search-query" id="search-terms" ng-model="searchQuery" placeholder="Type here to search" required>
-              <button type="submit" class="btn" id="search-index" ng-click="searchIndex()">
-                <span class="glyphicon glyphicon-search" aria-hidden="true" ng-click="searchIndex()"></span>
+              <button type="submit" class="btn btn-danger" id="search-index" ng-click="searchFile()">Search
               </button>
             </div>
             <br>
@@ -107,30 +106,27 @@
         </div>
         <div class="row">
           <div class="form-group">
-            <select id="fileNames" ng-model="searchedFile">
-              <option value="nofile" disabled selected>Select file to search</option>
-              <option ng-model="" ng-repeat="" value="{{}}">{{}}</option>
+            <select id="fileToSearch">
+              <option ></option>
             </select>
           </div>
         </div>
         <div class="row">
-        <div class="table-display" ng-if="" ng-repeat="" id="search-index">
+        <div class="table-display" id="search-index" ng-if="validSearch">
           <br><br>
-          <h4>Search results</h4>
+          <h4 style="text-align: center">Search results Table</h4>
         <table class="table table-hover table-bordered table-responsive">
           <thead>
             <tr>
               <th>Words</th>
-              <th ng-repeat="" style="text-align: center;">
-                Location
-              </th>
+              <th ng-repeat="i in range">{{ filed[i].title }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="">
-              <td>{{}}</td>
-              <td ng-repeat="" style="text-align: center;">
-                <span class="glyphicon">&#xe013;</span>
+            <tr ng-repeat="(key, value) in searchResults">
+              <td>{{key}}</td>
+              <td ng-repeat="i in range" style="text-align: center">
+                <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
               </td>
             </tr>
           </tbody>
