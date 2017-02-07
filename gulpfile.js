@@ -33,7 +33,7 @@ gulp.task('lint', () => {
 gulp.task('watch', () => {
   gulp.watch('./**/**.css', browserSync.reload);
   gulp.watch('./**.html', browserSync.reload);
-  gulp.watch(['./src/*.js', 'gulpfile.js'], browserSync.reload);
+  gulp.watch(['./src/js/*.js', 'gulpfile.js'], browserSync.reload);
   gulp.watch('./jasmine/spec/**/*.js', browserSync.reload);
 });
 
