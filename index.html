@@ -6,115 +6,97 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
   <link rel="icon" href="src/images/favicon.ico">
-  <link rel="stylesheet" href="src/css/inverted-index.css"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+  <link rel="stylesheet" href="src/css/inverted-index.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 </head>
 
 <body ng-app="InvertedIndex">
-  <header>
-    <nav class="navbar navbar-inverse" role="navigation">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">INVERTED INDEX WEB APPLICATION</a>
-      </div>
-    </nav>
-  </header>
+  <div class="container">
+    <div class="jumbotron">
+      <h2>INVERTED INDEX WEB APPLICATION</h2>
+      <h6>This platform allows for the creation of indexes and searching for words in created indexes</h6>
+    </div>
+  </div>
   <div class="container-fluid" ng-controller="indexController">
     <!--modal-->
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <!-- modal content -->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h2 class="modal-title" id="myModalLabel" style="text-align: center">WARNING</h2>
-            </div>
-            <div class="modal-body">
-              <h4 style="text-align: center">{{message}}</h4>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-            </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <!-- modal content -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="myModalLabel" style="text-align: center">INFORMATION</h2>
+          </div>
+          <div class="modal-body">
+            <h5 style="text-align: center">{{message}}</h5>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
-      <!--upload class-->
+    </div>
+    <!--upload class-->
     <div class="container">
       <div class="col-md-4">
-        <div class="row">
-          <h4>Select file for upload</h4>
-            <input type="file" name="files[]" id="files" multiple>
-        </div>
-        <br>
-        <div class="row">
-          <button type="button" class="btn btn-primary" id="upload-file" ng-click="uploadFile()">Upload File</button>
-        <div class="row">
-          <div class="table-display" ng-if="uploadSuccess && indexExists" id="display-index">
-          <br><br>
-        <div class="row">
-          <h4 style="text-align: center">Created Index</h4>
-        <table class="table table-hover table-striped table-bordered table-responsive">
-          <thead>
-            <tr>
-              <th style="text-align: center">Words</th>
-              <th ng-repeat="i in range">{{ filed[i].title }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="(key, value) in indexObject">
-              <td style="text-align: center">{{ key }}</td>
-              <td ng-repeat="i in range" style="text-align: center">
-              <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <!-- Create Index Section -->
-      <div class="col-md-4">
-        <div class="row">
-        <h4>Create Index Here</h4>
-          <select class="browser-default" id="filenames">
+        <h4>Select file for upload</h4>
+        <input id="input-id" type="file" class="file" data-preview-file-type="text" multiple>
+        <div class="spacer"></div>
+        <button type="button" class="btn btn-secondary" id="upload-file" ng-click="uploadFile()">Upload File</button>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <select class="browser-default" id="filenames">
             <option ng-if="!filed.length" disabled selected>Select file to index</option>
             <option ng-if="filed.length" disabled selected>Choose your file</option>
             <option>{{uploadedFile.name}}</option>
-          </select>
-        </div>
-        <br>
-        <div class="row">
-          <button type="button" class="btn btn-success" id="create-index" ng-click="createIndex()">Create Index</button>
-        </div>
+        </select>
+        <button type="button" class="btn btn-secondary" id="create-index" ng-click="createIndex()">Create Index</button>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <select class="browser-default" id="fileToSearch">
+          <option ng-if="!filed.length" disabled selected>Select file to search</option>
+          <option ng-if="filed.length" disabled selected>Choose file to search</option>
+        </select>
+        <button type="submit" class="btn btn-secondary" id="search-index" ng-click="searchFile()">Search Index</button>
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+        <form id="custom-search-form" class="form-search form-horizontal">
+        <input type="text" class="form-search" id="search-terms" ng-model="searchQuery" placeholder="Search..." required>
+        <div class="spacer"></div>
+        </form>
       </div>
-    <!-- Search Index Section -->
-      <div class="col-md-4">
-        <div class="row">
-          <h4>Search Index</h4>
-          <form id="custom-search-form" class="form-search form-horizontal">
-            <div class="input-append span15">
-              <input type="text" class="search-query" id="search-terms" ng-model="searchQuery" placeholder="Type here to search" required>
-              <button type="submit" class="btn btn-danger" id="search-index" ng-click="searchFile()">Search
-              </button>
-            </div>
-            <br>
-          </form>
-        </div>
-        <div class="row">
-          <div class="form-group">
-            <select id="fileToSearch">
-              <option ></option>
-            </select>
-          </div>
-        </div>
-        <div class="row">
-        <div class="table-display" id="search-index" ng-if="validSearch">
-          <br><br>
-          <h4 style="text-align: center">Search results Table</h4>
+    </div>
+    <!-- Created Index Table section -->
+    <div class="col-md-4">
+      <div class="table-display" ng-if="uploadSuccess && indexExists" id="display-index">
+      <div class="spacer"></div>
+      <h4 style="text-align: center">Created Index</h4>
+      <table class="table table-hover table-striped table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th style="text-align: center">Words</th>
+            <th ng-repeat="i in range">{{ filed[i].title }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, value) in indexObject">
+            <td style="text-align: center">{{ key }}</td>
+            <td ng-repeat="i in range" style="text-align: center">
+            <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <!-- Created index table section end -->
+    <!-- Search Index Section table start-->
+    <div class="col-md-4">
+      <div class="table-display" id="search-index" ng-if="validSearch">
+      <br><br>
+      <h4 style="text-align: center">Search results Table</h4>
         <table class="table table-hover table-bordered table-responsive">
           <thead>
             <tr>
@@ -131,18 +113,15 @@
             </tr>
           </tbody>
         </table>
-        </div>
-        </div>
-      </div>
-      </div>
-        </div>
       </div>
     </div>
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="src/inverted-index.js"></script>
-  <script type="text/javascript" src="src/js/app.js"></script>
-  <div>
+    <!-- Search Index Section table end-->
+    <footer class="navbar navbar-inverse" id="footer">
+      <h5 style="text-align: center; color:antiquewhite">&copy; February 2017 Oreoluwa Aboluwarin</h5>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="src/inverted-index.js"></script>
+    <script type="text/javascript" src="src/js/app.js"></script>
 </body>
 </html>
-
