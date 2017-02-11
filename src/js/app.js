@@ -1,13 +1,12 @@
 const invertedApp = angular
-  .module('InvertedIndex', [])
+  .module('InvertedIndexApp', [])
   .controller('indexController', ($scope) => {
-    $scope.indexExists = false;
-    $scope.validSearch = false;
-    $scope.fileForUpload = {};
-    $scope.fileForIndex = {};
-    $scope.fileForSearch = {};
-
-    const index = new InvertedIndex();
+    $scope.filenames = [];
+    $scope.filesBank = [];
+    $scope.createdIndex = [];
+    $scope.showIndex = false;
+    $scope.file = [];
+    const myNewIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
       $scope.message = msg;
@@ -24,72 +23,80 @@ const invertedApp = angular
         $scope.uploadSuccess = false;
         modalMessage('This is not a JSON file.');
       }
-      const reader = new FileReader();
-      reader.readAsText($scope.selectedFile);
 
-      reader.onload = (e) => {
-        $scope.fileContent = JSON.parse(e.target.result);
-        if ($scope.fileContent.length === 0 || !$scope.fileContent[0].title
-          || !$scope.fileContent[0].text) {
-          $scope.uploadSuccess = false;
-          modalMessage(`This file does not
-          contain the required parameters for indexing`);
-          $scope.$apply();
-        } else {
-          $scope.uploadSuccess = true;
-          modalMessage('Upload Successful!');
-        }
-        console.log($scope.fileContent);
-        // $scope.fileCont = fileContent;
-        $scope.fileForUpload[$scope.selectedFile.name] = $scope.fileContent;
-        $scope.$apply();
-      };
+      try {
+        Object.keys($scope.selectedFile).forEach((key, index) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const fileContent = JSON.parse(e.target.result);
+            if (fileContent.length === 0 || !fileContent[0].title
+              || !fileContent[0].text) {
+              $scope.uploadSuccess = false;
+              modalMessage('This file does not contain the required parameters for indexing');
+              return;
+            }
+            const fileDetails = {};
+            fileDetails.name = $scope.selectedFile[index].name;
+            fileDetails.content = fileContent;
+            $scope.filesBank.push(fileDetails);
+            $scope.filenames.push($scope.selectedFile[index].name);
+            $scope.uploadSuccess = true;
+            modalMessage('Upload Successful!');
+          };
+          if ($scope.filenames.includes($scope.selectedFile[index].name)) {
+            $scope.uploadSuccess = false;
+            modalMessage('You have already uploaded this file');
+            return;
+          }
+          reader.readAsText($scope.selectedFile[index]);
+        });
+      } catch (error) {
+        modalMessage('Please select a file before uploading');
+      }
+    };
+
+    const indexTable = () => {
+      $scope.showIndex = true;
+      $scope.displaySearchTable = false;
+      $scope.bookNumber = new Array($scope.content.length);
     };
 
     $scope.createIndex = () => {
-      $scope.noOfBook = new Array($scope.fileContent.length);
-      const addedFile = $scope.addedFile;
-      $scope.index = [];
-      if (!addedFile) {
-        modalMessage('Select a file before creating index');
+      const addedFile = $scope.selectedFile;
+      $scope.content = $scope.filesBank[addedFile].content;
+      const filename = $scope.filesBank[addedFile].name;
+      $scope.index = myNewIndex.getIndex(filename);
+
+      if ($scope.index) {
+        indexTable();
+      } else {
+        myNewIndex.createIndex(filename, $scope.content);
+        $scope.index = myNewIndex.getIndex(filename);
+        $scope.createdIndex.push($scope.filesBank[addedFile].name);
+        indexTable();
       }
-      index.createIndex(addedFile, $scope.fileContent);
-      const result = index.getIndex();
-      $scope.index.push(result);
-      $scope.index.forEach((indexObject) => {
-        for (const i in indexObject) {
-          $scope.fileForIndex[i] = { filename: i, index: indexObject[i] };
-          $scope.thisIndex = $scope.fileForIndex[i].index;
-        }
-      });
-      $scope.indexExists = true;
-      $scope.validSearch = false;
     };
 
     $scope.searchIndex = () => {
-      const searchTerms = $scope.searchWord;
-      const fileForSearch = $scope.searchedFile;
-      $scope.results = [];
-      if (!fileForSearch) {
-        modalMessage('Please, select a file before searching');
-      } else if (searchTerms === '' || searchTerms === undefined) {
-        modalMessage('Search field cannot be blank');
-      } else if (Object.keys($scope.fileForSearch).length === 0) {
-        modalMessage('Create an index first');
+      $scope.showIndex = false;
+      $scope.displaySearchTable = true;
+      const selectedFile = $scope.fileForSearch;
+      const filename = selectedFile === 'All files' ? null : $scope.filesBank[selectedFile].name;
+      if ($scope.searchTerm === undefined || $scope.searchTerm === ' ') {
+        $scope.searchSuccess = false;
+        modalMessage('Please enter the words you wish to search');
+        $scope.index = {};
+        return false;
       }
-
-      $scope.searchResult = $scope.index.searchIndex(searchTerms, fileForSearch);
-      $scope.results.push($scope.searchResult);
-
-      $scope.results.forEach((searchResult) => {
-        for (const i in searchResult) {
-          $scope.fileForSearch[i] = {
-            name: i,
-            index: searchResult[i]
-          };
-        }
-      });
-      $scope.indexExists = true;
-      $scope.validSearch = false;
+      if (!filename) {
+        $scope.index = myNewIndex.searchIndex($scope.searchTerm);
+      } else {
+        $scope.file = [];
+        $scope.file.push(filename);
+        const searchObject = $scope.filesBank[selectedFile].content;
+        $scope.bookTitle = searchObject;
+        $scope.bookNumber = new Array(searchObject.length);
+        $scope.index = myNewIndex.searchIndex($scope.searchTerm, $scope.file);
+      }
     };
   });
