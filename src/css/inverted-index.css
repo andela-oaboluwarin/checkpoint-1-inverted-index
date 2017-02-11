@@ -12,8 +12,8 @@ body {
 }
 
 .btn-custom {
-  background-color: #252839;
-  color: #ffffff;
+  background-color: black;
+  color: lightgray;
   outline: none;
 }
 
