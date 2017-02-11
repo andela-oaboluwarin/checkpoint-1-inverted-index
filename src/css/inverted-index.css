@@ -7,3 +7,13 @@
 }
 .spacer{height: 15px;}
 
+body {
+  font-family: Ubuntu, "times new roman", times, roman, serif;
+}
+
+.btn-custom {
+  background-color: #252839;
+  color: #ffffff;
+  outline: none;
+}
+

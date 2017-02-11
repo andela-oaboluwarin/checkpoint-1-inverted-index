@@ -10,6 +10,7 @@
   <link rel="icon" href="src/images/favicon.ico">
   <link rel="stylesheet" href="src/css/inverted-index.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
 </head>
 
@@ -33,33 +34,34 @@
             <h5 style="text-align: center">{{message}}</h5>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-custom" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
+    <!-- modal ends here -->
     <!--upload class-->
     <div class="container">
       <div class="col-md-4">
         <h4>Select file for upload</h4>
-        <input id="input-id" type="file" class="file" data-preview-file-type="text" multiple>
+        <input id="input-files" type="file" class="file" data-preview-file-type="text" multiple>
         <div class="spacer"></div>
-        <button type="button" class="btn btn-secondary" id="upload-file" ng-click="uploadFile()">Upload File</button>
+        <button type="button" class="btn btn-custom" id="upload-file" ng-click="uploadFile()">Upload File</button>
         <div class="spacer"></div>
         <div class="spacer"></div>
-        <select class="browser-default" id="filenames">
-            <option ng-if="!filed.length" disabled selected>Select file to index</option>
-            <option ng-if="filed.length" disabled selected>Choose your file</option>
-            <option>{{uploadedFile.name}}</option>
+        <select class="browser-default" id="addedFiles" ng-model="addedFile">
+          <option ng-if="!fileContent.length" disabled selected>Select file to index</option>
+          <option ng-model="addedFile" ng-repeat="(file, content) in fileForUpload">{{file}}</option>
+          <option value="all" ng-model="addedFile" ng-if="keys(fileForUpload).length > 1">All files</option>
         </select>
-        <button type="button" class="btn btn-secondary" id="create-index" ng-click="createIndex()">Create Index</button>
+        <button type="button" class="btn btn-custom" id="create-index"  ng-click="createIndex()">Create Index</button>
         <div class="spacer"></div>
         <div class="spacer"></div>
-        <select class="browser-default" id="fileToSearch">
-          <option ng-if="!filed.length" disabled selected>Select file to search</option>
-          <option ng-if="filed.length" disabled selected>Choose file to search</option>
+        <select class="browser-default" id="fileToSearch" ng-model="searchedFile">
+          <option ng-if="!fileForSearch.length" disabled selected>Select file to search</option>
+          <option ng-model="searchedFile" ng-repeat="(file, content) in fileForIndex">{{file}}</option>
         </select>
-        <button type="submit" class="btn btn-secondary" id="search-index" ng-click="searchFile()">Search Index</button>
+        <button type="submit" class="btn btn-custom" id="search-index" ng-click="searchIndex()">Search Index</button>
         <div class="spacer"></div>
         <div class="spacer"></div>
         <form id="custom-search-form" class="form-search form-horizontal">
@@ -69,45 +71,47 @@
       </div>
     </div>
     <!-- Created Index Table section -->
-    <div class="col-md-4">
+    <section class="col-md-4">
       <div class="table-display" ng-if="uploadSuccess && indexExists" id="display-index">
       <div class="spacer"></div>
-      <h4 style="text-align: center">Created Index</h4>
+      <h4 style="text-align: center">Created Index Table</h4>
       <table class="table table-hover table-striped table-bordered table-responsive">
         <thead>
           <tr>
             <th style="text-align: center">Words</th>
-            <th ng-repeat="i in range">{{ filed[i].title }}</th>
+            <th ng-repeat="key in fileContent">{{key.title}}</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="(key, value) in indexObject">
-            <td style="text-align: center">{{ key }}</td>
-            <td ng-repeat="i in range" style="text-align: center">
-            <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
-            </td>
+          <tr ng-repeat="(key,value) in thisIndex">
+            <!--<td ng-repeat="(boy,value) in key.index" style="text-align: center">-->
+              <td style="text-align: center">{{ key }}</td>
+             <td ng-repeat="test in noOfBook track by $index" style="text-align: center">{{i}} <span ng-if="value.includes($index)" class="glyphicon"> &#xe013;</span></td>
+            <!--</td>-->
+            <!--<span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
+            </td>-->
           </tr>
         </tbody>
       </table>
       </div>
-    </div>
+    </section>
     <!-- Created index table section end -->
     <!-- Search Index Section table start-->
     <div class="col-md-4">
-      <div class="table-display" id="search-index" ng-if="validSearch">
+      <div class="table-display" id="search-index" ng-if="indexExists && validSearch">
       <br><br>
       <h4 style="text-align: center">Search results Table</h4>
         <table class="table table-hover table-bordered table-responsive">
           <thead>
             <tr>
-              <th>Words</th>
-              <th ng-repeat="i in range">{{ filed[i].title }}</th>
+              <th style="text-align: center">Search Terms</th>
+              <th ng-repeat="key in fileForSearch" style="text-align: center">{{ key.title }}</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="(key, value) in searchResults">
+            <tr ng-repeat="(key, value) in results">
               <td>{{key}}</td>
-              <td ng-repeat="i in range" style="text-align: center">
+              <td ng-repeat="i in fileForSearch" style="text-align: center">
                 <span ng-if="value.includes(i)" class="glyphicon">&#xe013;</span>
               </td>
             </tr>

@@ -1,7 +1,13 @@
 const invertedApp = angular
   .module('InvertedIndex', [])
   .controller('indexController', ($scope) => {
-    const newIndex = new InvertedIndex();
+    $scope.indexExists = false;
+    $scope.validSearch = false;
+    $scope.fileForUpload = {};
+    $scope.fileForIndex = {};
+    $scope.fileForSearch = {};
+
+    const index = new InvertedIndex();
 
     const modalMessage = (msg) => {
       $scope.message = msg;
@@ -9,60 +15,79 @@ const invertedApp = angular
     };
 
     $scope.uploadFile = () => {
-      $scope.validSearch = false;
-      $scope.indexExists = false;
-      $scope.uploadedFile = document.getElementById('files').files[0];
-      if (!$scope.uploadedFile) {
+      $scope.selectedFile = document.getElementById('input-files').files[0];
+      if (!$scope.selectedFile) {
+        $scope.uploadSuccess = false;
         modalMessage('Select a file before uploading');
       }
-      if (!$scope.uploadedFile.name.toLowerCase().match(/\.json$/)) {
+      if (!$scope.selectedFile.name.toString().match(/\.json$/)) {
         $scope.uploadSuccess = false;
         modalMessage('This is not a JSON file.');
       }
       const reader = new FileReader();
-      reader.readAsText($scope.uploadedFile);
+      reader.readAsText($scope.selectedFile);
 
       reader.onload = (e) => {
-        try {
-          const filed = JSON.parse(e.target.result);
-          if (filed.length === 0 || !filed[0].title || !filed[0].text) {
-            $scope.uploadSuccess = false;
-            modalMessage('This file does not contain required parameters for indexing');
-            $scope.$apply();
-          } else {
-            $scope.uploadSuccess = true;
-          }
-          $scope.filed = filed;
+        $scope.fileContent = JSON.parse(e.target.result);
+        if ($scope.fileContent.length === 0 || !$scope.fileContent[0].title || !$scope.fileContent[0].text) {
+          $scope.uploadSuccess = false;
+          modalMessage('This file does not contain the required parameters for indexing');
           $scope.$apply();
-        } catch (e) {
-          modalMessage(e);
+        } else {
+          $scope.uploadSuccess = true;
+          modalMessage('Upload Successful');
         }
+        console.log($scope.fileContent);
+        // $scope.fileCont = fileContent;
+        $scope.fileForUpload[$scope.selectedFile.name] = $scope.fileContent;
+        $scope.$apply();
       };
     };
 
     $scope.createIndex = () => {
-      if ($scope.uploadSuccess) {
-        newIndex.createIndex($scope.uploadedFile.name, $scope.filed);
-        $scope.range = [];
-        const filedLength = $scope.filed.length;
-        for (let docIndex = 0; docIndex < filedLength; docIndex += 1) {
-          $scope.range.push(docIndex);
+      $scope.noOfBook = new Array($scope.fileContent.length);
+      const addedFile = $scope.addedFile;
+      $scope.index = [];
+      if (!addedFile) {
+        modalMessage('No file selected');
+      }
+      index.createIndex(addedFile, $scope.fileContent);
+      const result = index.getIndex();
+      $scope.index.push(result);
+      $scope.index.forEach((indexObject) => {
+        for (const i in indexObject) {
+          $scope.fileForIndex[i] = { filename: i, index: indexObject[i] };
+          $scope.thisIndex = $scope.fileForIndex[i].index;
         }
-        $scope.indexExists = true;
-      } else {
-        $scope.indexExists = false;
-        modalMessage('Upload a valid JSON file first.');
-      }
-      $scope.indexObject = newIndex.getIndex($scope.uploadedFile.name);
+      });
+      $scope.indexExists = true;
+      $scope.validSearch = false;
     };
-    $scope.searchFile = () => {
-      if ($scope.indexExists) {
-        $scope.searchItem = $scope.searchQuery;
-        $scope.searchResults = newIndex
-          .searchIndex($scope.searchItem, $scope.uploadedFile.name);
-        $scope.validSearch = true;
-      } else {
-        $scope.validSearch = false;
+
+    $scope.searchIndex = () => {
+      const searchTerms = $scope.searchWord;
+      const fileForSearch = $scope.searchedFile;
+      $scope.results = [];
+      if (!fileForSearch) {
+        modalMessage('No file selected');
+      } else if (searchTerms === '' || searchTerms === undefined) {
+        modalMessage('Search field cannot be blank');
+      } else if (Object.keys($scope.fileForSearch).length === 0) {
+        modalMessage('Create an index first');
       }
+
+      $scope.searchResult = $scope.index.searchIndex(searchTerms, fileForSearch);
+      $scope.results.push($scope.searchResult);
+
+      $scope.results.forEach((searchResult) => {
+        for (const i in searchResult) {
+          $scope.fileForSearch[i] = {
+            name: i,
+            index: searchResult[i]
+          };
+        }
+      });
+      $scope.indexExists = true;
+      $scope.validSearch = false;
     };
   });
