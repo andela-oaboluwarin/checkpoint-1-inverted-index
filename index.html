@@ -17,21 +17,21 @@
 <body ng-app="InvertedIndex">
   <div class="container">
     <div class="jumbotron">
-      <h2>INVERTED INDEX WEB APPLICATION</h2>
-      <h6>This platform allows for the creation of indexes and searching for words in created indexes</h6>
+      <h2 style="font-weight: bold">INVERTED INDEX WEB APPLICATION</h2>
+      <h6>This platform allows you to create indexes and then search for words in already created indexes</h6>
     </div>
   </div>
   <div class="container-fluid" ng-controller="indexController">
     <!--modal-->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="myModal" role="dialog">
       <div class="modal-dialog" role="document">
         <!-- modal content -->
         <div class="modal-content">
           <div class="modal-header">
-            <h2 class="modal-title" id="myModalLabel" style="text-align: center">INFORMATION</h2>
+            <h4 class="modal-title" id="modalLabel" style="text-align: center; font-weight: bold">INFORMATION</h4>
           </div>
           <div class="modal-body">
-            <h5 style="text-align: center">{{message}}</h5>
+            <h5 style="text-align: center; font-weight: bold">{{message}}</h5>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-custom" data-dismiss="modal">Close</button>
@@ -43,11 +43,10 @@
     <!--upload class-->
     <div class="container">
       <div class="col-md-4">
-        <h4>Select file for upload</h4>
+        <h4 style="font-weight: bold">Select file for upload</h4>
         <input id="input-files" type="file" class="file" data-preview-file-type="text" multiple>
-        <div class="spacer"></div>
+        <br>
         <button type="button" class="btn btn-custom" id="upload-file" ng-click="uploadFile()">Upload File</button>
-        <div class="spacer"></div>
         <div class="spacer"></div>
         <select class="browser-default" id="addedFiles" ng-model="addedFile">
           <option ng-if="!fileContent.length" disabled selected>Select file to index</option>
@@ -56,18 +55,13 @@
         </select>
         <button type="button" class="btn btn-custom" id="create-index"  ng-click="createIndex()">Create Index</button>
         <div class="spacer"></div>
-        <div class="spacer"></div>
+        <input type="text" class="form-search" id="search-box" ng-model="searchQuery" placeholder="Type search words here..." required>
+        <br><br>
         <select class="browser-default" id="fileToSearch" ng-model="searchedFile">
           <option ng-if="!fileForSearch.length" disabled selected>Select file to search</option>
           <option ng-model="searchedFile" ng-repeat="(file, content) in fileForIndex">{{file}}</option>
         </select>
         <button type="submit" class="btn btn-custom" id="search-index" ng-click="searchIndex()">Search Index</button>
-        <div class="spacer"></div>
-        <div class="spacer"></div>
-        <form id="custom-search-form" class="form-search form-horizontal">
-        <input type="text" class="form-search" id="search-terms" ng-model="searchQuery" placeholder="Search..." required>
-        <div class="spacer"></div>
-        </form>
       </div>
     <!-- Created Index Table section -->
       <div class="col-md-4">

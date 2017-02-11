@@ -5,15 +5,37 @@
   width: 100%;
   position: fixed;
 }
-.spacer{height: 15px;}
+.spacer{height: 50px;}
 
 body {
-  font-family: Ubuntu, "times new roman", times, roman, serif;
+  font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, times, roman, serif;
 }
 
 .btn-custom {
   background-color: black;
-  color: lightgray;
-  outline: none;
+  color: antiquewhite;
+  border: 1px solid transparent;
+  font-weight: bold;
+  height: 30px;
+  width: 110px;
+  vertical-align: middle;
+  font-size: 13px;
 }
 
+.form-search{
+  margin: 0 auto;
+  width: 262px;
+  height: 30px;
+}
+
+.jumbotron{
+  background-color: antiquewhite
+}
+
+.modal-content {
+  top:2%;
+  left:90%;
+  outline: none;
+  width: 300px;
+  height: 180px;
+}

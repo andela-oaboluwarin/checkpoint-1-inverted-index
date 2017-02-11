@@ -18,7 +18,7 @@ const invertedApp = angular
       $scope.selectedFile = document.getElementById('input-files').files[0];
       if (!$scope.selectedFile) {
         $scope.uploadSuccess = false;
-        modalMessage('Select a file before uploading');
+        modalMessage('Please, select a file before uploading');
       }
       if (!$scope.selectedFile.name.toString().match(/\.json$/)) {
         $scope.uploadSuccess = false;
@@ -29,13 +29,15 @@ const invertedApp = angular
 
       reader.onload = (e) => {
         $scope.fileContent = JSON.parse(e.target.result);
-        if ($scope.fileContent.length === 0 || !$scope.fileContent[0].title || !$scope.fileContent[0].text) {
+        if ($scope.fileContent.length === 0 || !$scope.fileContent[0].title
+          || !$scope.fileContent[0].text) {
           $scope.uploadSuccess = false;
-          modalMessage('This file does not contain the required parameters for indexing');
+          modalMessage(`This file does not
+          contain the required parameters for indexing`);
           $scope.$apply();
         } else {
           $scope.uploadSuccess = true;
-          modalMessage('Upload Successful');
+          modalMessage('Upload Successful!');
         }
         console.log($scope.fileContent);
         // $scope.fileCont = fileContent;
@@ -49,7 +51,7 @@ const invertedApp = angular
       const addedFile = $scope.addedFile;
       $scope.index = [];
       if (!addedFile) {
-        modalMessage('No file selected');
+        modalMessage('Select a file before creating index');
       }
       index.createIndex(addedFile, $scope.fileContent);
       const result = index.getIndex();
@@ -69,7 +71,7 @@ const invertedApp = angular
       const fileForSearch = $scope.searchedFile;
       $scope.results = [];
       if (!fileForSearch) {
-        modalMessage('No file selected');
+        modalMessage('Please, select a file before searching');
       } else if (searchTerms === '' || searchTerms === undefined) {
         modalMessage('Search field cannot be blank');
       } else if (Object.keys($scope.fileForSearch).length === 0) {
