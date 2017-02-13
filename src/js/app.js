@@ -4,99 +4,97 @@ const invertedApp = angular
     $scope.filenames = [];
     $scope.filesBank = [];
     $scope.createdIndex = [];
-    $scope.showIndex = false;
-    $scope.file = [];
-    const myNewIndex = new InvertedIndex();
+    const newIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
       $scope.message = msg;
       $('#myModal').modal();
+      $scope.$apply();
     };
 
     $scope.uploadFile = () => {
-      $scope.selectedFile = document.getElementById('input-files').files[0];
-      if (!$scope.selectedFile) {
-        $scope.uploadSuccess = false;
-        modalMessage('Please, select a file before uploading');
-      }
-      if (!$scope.selectedFile.name.toString().match(/\.json$/)) {
-        $scope.uploadSuccess = false;
-        modalMessage('This is not a JSON file.');
+      $scope.files = document.getElementById('input-files').files[0];
+      console.log('ghshdhdhhd', $scope.files);
+      if (!$scope.files) {
+        modalMessage('Select a file before uploading');
+        return;
       }
 
-      try {
-        Object.keys($scope.selectedFile).forEach((key, index) => {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const fileContent = JSON.parse(e.target.result);
-            if (fileContent.length === 0 || !fileContent[0].title
-              || !fileContent[0].text) {
-              $scope.uploadSuccess = false;
-              modalMessage('This file does not contain the required parameters for indexing');
-              return;
-            }
-            const fileDetails = {};
-            fileDetails.name = $scope.selectedFile[index].name;
-            fileDetails.content = fileContent;
-            $scope.filesBank.push(fileDetails);
-            $scope.filenames.push($scope.selectedFile[index].name);
+      const reader = new FileReader();
+      reader.readAsText($scope.files);
+
+      reader.onload = (e) => {
+        if (!$scope.files.name.toLowerCase().match(/\.json$/)) {
+          $scope.uploadSuccess = false;
+          modalMessage('This is not a JSON file.');
+          return;
+        }
+        try {
+          const fileContent = JSON.parse(e.target.result);
+          const isValidFile = fileContent.length > 0 && fileContent[0].title && fileContent[0].text;
+          const alreadyExists = $scope.filenames.includes($scope.files.name);
+          if (isValidFile && !alreadyExists) {
             $scope.uploadSuccess = true;
             modalMessage('Upload Successful!');
-          };
-          if ($scope.filenames.includes($scope.selectedFile[index].name)) {
+            if ($scope.uploadSuccess) {
+              const fileDetails = {};
+              fileDetails.name = $scope.files.name;
+              fileDetails.content = fileContent;
+              // $scope.fileContent = fileContent;
+              // console.log('show file content here', $scope.fileContent);
+              $scope.filenames.push($scope.files.name);
+              $scope.filesBank.push(fileDetails);
+              console.log('introduction', $scope.filesBank);
+              $scope.$apply();
+            }
+          } else {
             $scope.uploadSuccess = false;
-            modalMessage('You have already uploaded this file');
+            if (alreadyExists) {
+              modalMessage('File already uploaded before');
+            } else {
+              modalMessage('This file is not suitable for indexing');
+            }
             return;
           }
-          reader.readAsText($scope.selectedFile[index]);
-        });
-      } catch (error) {
-        modalMessage('Please select a file before uploading');
-      }
+        } catch (error) {
+          modalMessage(error);
+        }
+      };
     };
 
-    const indexTable = () => {
+    const indexTableDisplay = () => {
       $scope.showIndex = true;
-      $scope.displaySearchTable = false;
-      $scope.bookNumber = new Array($scope.content.length);
+      $scope.showSearchTable = false;
+      $scope.noOfBook = new Array($scope.content.length);
     };
 
     $scope.createIndex = () => {
-      const addedFile = $scope.selectedFile;
-      $scope.content = $scope.filesBank[addedFile].content;
-      const filename = $scope.filesBank[addedFile].name;
-      $scope.index = myNewIndex.getIndex(filename);
+      const uploadedFile = $scope.selectedFile;
+      $scope.content = $scope.filesBank[uploadedFile].content;
+      const filename = $scope.filesBank[uploadedFile].name;
+      // $scope.index = newIndex.getIndex(filename);
+      // console.log('Rotimi Babalola', $scope.index);
 
-      if ($scope.index) {
-        indexTable();
-      } else {
-        myNewIndex.createIndex(filename, $scope.content);
-        $scope.index = myNewIndex.getIndex(filename);
-        $scope.createdIndex.push($scope.filesBank[addedFile].name);
-        indexTable();
-      }
+      // if ($scope.index) {
+      // indexTableDisplay();
+      // else {
+      newIndex.createIndex(filename, $scope.content);
+      // console.log('Oredavids', $scope.index);
+      $scope.index = newIndex.getIndex(filename);
+      // $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
+      console.log("The weapons", $scope.index);
+      indexTableDisplay();
     };
 
     $scope.searchIndex = () => {
-      $scope.showIndex = false;
-      $scope.displaySearchTable = true;
-      const selectedFile = $scope.fileForSearch;
-      const filename = selectedFile === 'All files' ? null : $scope.filesBank[selectedFile].name;
-      if ($scope.searchTerm === undefined || $scope.searchTerm === ' ') {
-        $scope.searchSuccess = false;
-        modalMessage('Please enter the words you wish to search');
-        $scope.index = {};
-        return false;
-      }
-      if (!filename) {
-        $scope.index = myNewIndex.searchIndex($scope.searchTerm);
+      if ($scope.indexExists) {
+        $scope.searchItem = $scope.searchQuery;
+        $scope.searchResults = newIndex
+          .searchIndex($scope.searchItem, $scope.files.name);
+        $scope.validSearch = true;
+        console.log('hdhhdhdhhs', $scope.searchResults);
       } else {
-        $scope.file = [];
-        $scope.file.push(filename);
-        const searchObject = $scope.filesBank[selectedFile].content;
-        $scope.bookTitle = searchObject;
-        $scope.bookNumber = new Array(searchObject.length);
-        $scope.index = myNewIndex.searchIndex($scope.searchTerm, $scope.file);
+        $scope.validSearch = false;
       }
     };
   });
