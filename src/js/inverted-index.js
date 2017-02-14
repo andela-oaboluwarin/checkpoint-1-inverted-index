@@ -1,10 +1,11 @@
-/* eslint-disable no-unused-vars */
 /**
- * Inverted index class
+ * @class InvertedIndex
  */
 class InvertedIndex {
+
   /**
-   * Inverted index constructor
+   * Creates an instance of InvertedIndex.
+   * @memberOf InvertedIndex
    */
   constructor() {
     this.index = {};
@@ -33,23 +34,21 @@ class InvertedIndex {
 
   /**
    * Method that creates index from document(s) in a file
-   * @param{Array} fileToIndex - Array of contents of the JSON file to index
+   * @param{Array} filename - Name of the file to be indexed
+   * @param{Array} fileContent - Particular array being indexed
    * @return{Object} index - Maps words to locations(documents)
    */
-  createIndex(fileToIndex) {
+  createIndex(filename, fileContent) {
     const wordsToIndex = [];
     const index = {};
-    const fileLength = fileToIndex.length;
-    if (fileLength === 0) {
-      return 'JSON file is Empty';
-    }
-    fileToIndex.forEach((document) => {
-      if (document.text) {
+    fileContent.forEach((document) => {
+      if (document.text && document.title) {
         wordsToIndex
           .push(`${document.title.toLowerCase()} ${document.text
             .toLowerCase()}`);
       }
     });
+
     const distinctContent = InvertedIndex.distinctWords(wordsToIndex.join(' '));
     distinctContent.forEach((word) => {
       index[word] = [];
@@ -59,36 +58,36 @@ class InvertedIndex {
         }
       });
     });
-    this.index = index;
-    return index;
+    this.index[filename] = index;
   }
 
   /**
    * Method that returns an index of words already created
-   * @return{Object} index - That maps words to locations(documents)
+   * @param{string} filename
+   * @return{Object} index - That maps words to locations
    */
-  getIndex() {
-    return this.index;
+  getIndex(filename) {
+    if (filename === undefined) {
+      return this.index;
+    }
+    return this.index[filename];
   }
 
   /**
-   * @param{String} searchWords - Search query
+   * @param{String} searchQuery - Words to search for
    * @param{String} indexToSearch - Index to query
-   * @return{Object} searchResults - Maps searched words to document locations
+   * @return{Object} searchResult - Maps searched words to document locations
    */
-  searchIndex(searchWords, indexToSearch) {
-    const searchResults = {};
-    const searchTerms = InvertedIndex.distinctWords(searchWords);
+  searchIndex(searchQuery, indexToSearch) {
+    const searchResult = {};
+    const searchTerms = InvertedIndex.distinctWords(searchQuery);
     searchTerms.forEach((word) => {
-      if (indexToSearch[word]) {
-        searchResults[word] = indexToSearch[word];
+      if (this.index[indexToSearch][word]) {
+        searchResult[word] = this.index[indexToSearch][word];
       } else {
-        searchResults[word] =
-          `Sorry, ${word} is not a word present in this file`;
+        searchResult[word] = {};
       }
     });
-    this.searchResults = searchResults;
-    return searchResults;
+    return searchResult;
   }
-
 }

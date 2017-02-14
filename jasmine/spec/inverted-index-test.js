@@ -1,19 +1,13 @@
-/* eslint no-undef:0 */
-/* eslint no-unused-vars:0 */
-
-const books = require('../books');
-const goodBooks = require('../goodBooks');
+const goodBooks = require('../goodBooks.json');
 
 // Inverted Index test suite
 describe('Inverted Index Suite', () => {
   // Define variables to be used in the test Suite
   const newIndex = new InvertedIndex();
-  const emptyBook = [];
+  newIndex.createIndex('goodBooks', goodBooks);
   const sampleSentence =
     'This be an %example of the #typical be sentence type.';
   const multipleSearch = 'Destroy world imagination quickly.';
-
-  newIndex.createIndex(goodBooks);
 
   // Inverted Index class test suite
   describe('Class Inverted Index', () => {
@@ -41,11 +35,6 @@ describe('Inverted Index Suite', () => {
     it('should have createIndex available in class InvertedIndex', () => {
       expect(newIndex.createIndex).toBeDefined();
     });
-    it('should ensure the JSON file is not empty', () => {
-      expect(newIndex.createIndex(emptyBook)).toBe('JSON file is Empty');
-      expect(newIndex.createIndex(books)).not.toBe('JSON file is Empty');
-      expect(newIndex.createIndex(goodBooks)).not.toBe('JSON file is Empty');
-    });
   });
 
   describe('Distinct Words', () => {
@@ -62,14 +51,15 @@ describe('Inverted Index Suite', () => {
       expect(newIndex.index).toBeDefined();
     });
     it('should accurately map words to their document location', () => {
-      expect(newIndex.index.a).toEqual([0, 1]);
-      expect(newIndex.index.wonderland).toEqual([0]);
+      expect(newIndex.index.goodBooks.a).toEqual([0, 1]);
+      expect(newIndex.index.goodBooks.wonderland).toEqual([0]);
     });
   });
 
   describe('Get Index', () => {
     it('should return an accurate index Object of the indexed file', () => {
-      expect(Object.keys(newIndex.getIndex(goodBooks)).length).toBe(29);
+      expect(newIndex.getIndex('goodBooks').alice).toEqual([0]);
+      expect(Object.keys(newIndex.getIndex('goodBooks')).length).toBe(29);
     });
   });
 
@@ -78,23 +68,19 @@ describe('Inverted Index Suite', () => {
       expect(newIndex.searchIndex).toBeDefined();
     });
     it('should return correct index document for each word', () => {
-      expect(newIndex.searchIndex('fellowship', newIndex.getIndex())).toEqual({
-        fellowship: [1]
-      });
-      expect(newIndex.searchIndex('of', newIndex.getIndex())).toEqual({
+      expect(newIndex.searchIndex('fellowship', 'goodBooks'))
+        .toEqual({ fellowship: [1] });
+      expect(newIndex.searchIndex('of', 'goodBooks')).toEqual({
         of: [0, 1]
       });
-      expect(newIndex.searchIndex('discombobulated',
-        newIndex.getIndex())).toEqual({
-          discombobulated:
-          'Sorry, discombobulated is not a word present in this file'
-        });
+      expect(newIndex.searchIndex('discombobulated', 'goodBooks'))
+        .toEqual({ discombobulated: {} });
       expect(newIndex.searchIndex(multipleSearch,
-        newIndex.getIndex())).toEqual({
+        'goodBooks')).toEqual({
           destroy: [1],
           world: [0],
           imagination: [0],
-          quickly: 'Sorry, quickly is not a word present in this file'
+          quickly: {}
         });
     });
   });
