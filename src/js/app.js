@@ -4,6 +4,7 @@ const invertedApp = angular
     $scope.filenames = [];
     $scope.filesBank = [];
     $scope.createdIndex = [];
+    $scope.searchResult = {};
     const newIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
@@ -14,7 +15,6 @@ const invertedApp = angular
 
     $scope.uploadFile = () => {
       $scope.files = document.getElementById('input-files').files[0];
-      console.log('ghshdhdhhd', $scope.files);
       if (!$scope.files) {
         modalMessage('Select a file before uploading');
         return;
@@ -31,7 +31,8 @@ const invertedApp = angular
         }
         try {
           const fileContent = JSON.parse(e.target.result);
-          const isValidFile = fileContent.length > 0 && fileContent[0].title && fileContent[0].text;
+          const isValidFile = fileContent.length > 0 &&
+            fileContent[0].title && fileContent[0].text;
           const alreadyExists = $scope.filenames.includes($scope.files.name);
           if (isValidFile && !alreadyExists) {
             $scope.uploadSuccess = true;
@@ -40,11 +41,8 @@ const invertedApp = angular
               const fileDetails = {};
               fileDetails.name = $scope.files.name;
               fileDetails.content = fileContent;
-              // $scope.fileContent = fileContent;
-              // console.log('show file content here', $scope.fileContent);
               $scope.filenames.push($scope.files.name);
               $scope.filesBank.push(fileDetails);
-              console.log('introduction', $scope.filesBank);
               $scope.$apply();
             }
           } else {
@@ -70,31 +68,36 @@ const invertedApp = angular
 
     $scope.createIndex = () => {
       const uploadedFile = $scope.selectedFile;
+      if (!$scope.selectedFile) {
+        modalMessage('Select a file before creating an index');
+      }
       $scope.content = $scope.filesBank[uploadedFile].content;
       const filename = $scope.filesBank[uploadedFile].name;
-      // $scope.index = newIndex.getIndex(filename);
-      // console.log('Rotimi Babalola', $scope.index);
-
-      // if ($scope.index) {
-      // indexTableDisplay();
-      // else {
       newIndex.createIndex(filename, $scope.content);
-      // console.log('Oredavids', $scope.index);
       $scope.index = newIndex.getIndex(filename);
-      // $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
-      console.log("The weapons", $scope.index);
+      $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
       indexTableDisplay();
     };
 
     $scope.searchIndex = () => {
-      if ($scope.indexExists) {
-        $scope.searchItem = $scope.searchQuery;
-        $scope.searchResults = newIndex
-          .searchIndex($scope.searchItem, $scope.files.name);
-        $scope.validSearch = true;
-        console.log('hdhhdhdhhs', $scope.searchResults);
+      $scope.showIndex = false;
+      $scope.showSearchTable = true;
+      const uploadedFile = $scope.selectedFile;
+      const filename = uploadedFile ===
+        'FileBank' ? null : $scope.filesBank[uploadedFile].name;
+      if ($scope.searchQuery === undefined) {
+        modalMessage('Please enter a search word');
+        $scope.searchResult = {};
+        return false;
+      }
+      if (!filename) {
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
       } else {
-        $scope.validSearch = false;
+        const searchObject = $scope.filesBank[uploadedFile].content;
+        $scope.bookTitle = searchObject;
+        $scope.noOfBook = new Array(searchObject.length);
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery,
+          $scope.filesBank[uploadedFile].name);
       }
     };
   });
