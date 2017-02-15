@@ -57,21 +57,22 @@
         <br><br>
         <select class="browser-default" id="fileToSearch">
           <option value='' disabled selected>Select file to search</option>
+          <option value="filesBank">All files</option>
           <option ng-repeat="(key, value) in filesBank">{{value.name}}</option>
           <!-- <option value="All files">All files</option> -->
         </select>
         <button type="submit" class="btn btn-custom" id="search-index" ng-click="searchIndex()">Search Index</button>
       </div>
     <!-- Created Index Table section -->
-      <div class="col-md-4">
-        <div class="table-display" ng-if="showIndex && !displaySearchTable" id="display-index">
+      <div class="col-md-8">
+        <div class="table-display" ng-if="showIndex && !showSearchTable" id="display-index">
         <div class="spacer"></div>
         <h4 style="text-align: center; font-weight: bold">Created Index Table</h4>
         <table class="table table-inverse table-bordered table-responsive">
           <thead>
             <tr>
               <th style="text-align: center">Words</th>
-              <th ng-repeat="book in content">{{book.title}}</th>
+              <th ng-repeat="book in content" style="text-align: center">{{book.title}}</th>
             </tr>
           </thead>
           <tbody>
@@ -82,10 +83,8 @@
           </tbody>
         </table>
         </div>
-      </div>
     <!-- Created index table section end -->
     <!-- Search Index Section table start-->
-      <div class="col-md-4">
         <div class="table-display" id="search-index" ng-if="showSearchTable">
         <br><br>
         <h4 style="text-align: center; font-weight: bold">Search results Table</h4>
