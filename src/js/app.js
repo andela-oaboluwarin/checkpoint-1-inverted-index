@@ -5,6 +5,7 @@ const invertedApp = angular
     $scope.filesBank = [];
     $scope.createdIndex = [];
     $scope.searchResult = {};
+    $scope.indexedFile = [];
     const newIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
@@ -73,9 +74,14 @@ const invertedApp = angular
       }
       $scope.content = $scope.filesBank[uploadedFile].content;
       const filename = $scope.filesBank[uploadedFile].name;
-      newIndex.createIndex(filename, $scope.content);
-      $scope.index = newIndex.getIndex(filename);
-      $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
+      if (!$scope.indexedFile.includes(filename)) {
+        newIndex.createIndex(filename, $scope.content);
+        $scope.index = newIndex.getIndex(filename);
+        $scope.indexedFile.push(filename);
+        $scope.createdIndex.push($scope.index);
+      } else {
+        modalMessage('Index already created before!');
+      }
       indexTableDisplay();
     };
 
@@ -84,7 +90,7 @@ const invertedApp = angular
       $scope.showSearchTable = true;
       const uploadedFile = $scope.selectedFile;
       const filename = uploadedFile ===
-        'FileBank' ? null : $scope.filesBank[uploadedFile].name;
+        'searchObject' ? null : $scope.filesBank[uploadedFile].name;
       if ($scope.searchQuery === undefined) {
         modalMessage('Please enter a search word');
         $scope.searchResult = {};
@@ -93,11 +99,11 @@ const invertedApp = angular
       if (!filename) {
         $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
       } else {
-        const searchObject = $scope.filesBank[uploadedFile].content;
-        $scope.bookTitle = searchObject;
+        const searchObject = $scope.createdIndex;
+        $scope.searchObject = searchObject;
         $scope.noOfBook = new Array(searchObject.length);
         $scope.searchResult = newIndex.searchIndex($scope.searchQuery,
-          $scope.filesBank[uploadedFile].name);
+          ($scope.filesBank[uploadedFile].name) in $scope.createdIndex);
       }
     };
   });

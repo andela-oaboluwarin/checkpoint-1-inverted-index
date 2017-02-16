@@ -23,6 +23,22 @@ class InvertedIndex {
   }
 
   /**
+   * @param {any} fileContent
+   * @return {Boolean}
+   * @memberOf InvertedIndex
+   */
+  static isValidFile(fileContent) {
+    let check = true;
+    if (fileContent.length > 0 &&
+      fileContent[0].title && fileContent[0].text) {
+      check = true;
+    } else {
+      check = false;
+    }
+    return check;
+  }
+
+  /**
    * Method that ensures words appear only once
    * @param{String} words - The string to be filtered
    * @return{Array} tokens - Without duplicated words
