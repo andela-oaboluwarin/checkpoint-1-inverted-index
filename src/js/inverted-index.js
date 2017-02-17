@@ -23,8 +23,8 @@ class InvertedIndex {
   }
 
   /**
-   * @param {any} fileContent
-   * @return {Boolean}
+   * @param {any} fileContent - content of file to search.
+   * @return {Boolean} - return true or false
    * @memberOf InvertedIndex
    */
   static isValidFile(fileContent) {
@@ -91,15 +91,15 @@ class InvertedIndex {
 
   /**
    * @param{String} searchQuery - Words to search for
-   * @param{String} indexToSearch - Index to query
+   * @param{String} filename - Index to query
    * @return{Object} searchResult - Maps searched words to document locations
    */
-  searchIndex(searchQuery, indexToSearch) {
+  searchIndex(searchQuery, filename) {
     const searchResult = {};
     const searchTerms = InvertedIndex.distinctWords(searchQuery);
     searchTerms.forEach((word) => {
-      if (this.index[indexToSearch][word]) {
-        searchResult[word] = this.index[indexToSearch][word];
+      if (this.index[filename][word]) {
+        searchResult[word] = this.index[filename][word];
       } else {
         searchResult[word] = {};
       }
