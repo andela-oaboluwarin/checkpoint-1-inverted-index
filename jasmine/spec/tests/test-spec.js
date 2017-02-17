@@ -36,7 +36,7 @@ describe('Inverted Index Suite', () => {
   const sampleSentence =
     'This be an %example of the #typical be sentence type.';
   const multipleSearch = 'Destroy world imagination quickly.';
-  const arraySearch = '[forever, platitude] may be great.';
+  const arraySearch = '[forever, wonderland] may be great and fellowship.';
 
   // Inverted Index class test suite
   describe('Class Inverted Index', () => {
@@ -143,15 +143,26 @@ describe('Inverted Index Suite', () => {
         });
     });
 
+
     it('should return search result if an array is passed as term', () => {
       expect(newIndex.searchIndex(arraySearch,
         'goodBooks')).toEqual({
+          be: {},
+          forever: {},
+          great: {},
+          wonderland: [0],
           fellowship: [1],
-          ring: [1]
+          and: [0, 1],
+          may: {}
         });
       expect(newIndex.searchIndex(arraySearch, 'goodBooks')).not.toBe({
+        be: [1],
+        forever: [0, 1],
+        great: [0],
+        wonderland: [1],
         fellowship: [0],
-        ring: [0]
+        and: {},
+        may: [0, 1]
       });
     });
   });
