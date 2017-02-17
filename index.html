@@ -55,12 +55,10 @@
         <div class="spacer"></div>
         <input type="text" class="form-search" id="search-box" ng-model="searchQuery" placeholder="Type search words here..." required>
         <br><br>
-        <select class="browser-default" id="fileToSearch" ng-model="selectedFile">
-          <option value='' disabled selected>Select file to search</option>
-          <option value="FileBank">All files</option>
-          <option ng-repeat="(key,value) in createdIndex track by $index"> {{value}}</option>
-        </select>
         <button type="submit" class="btn btn-custom" id="search-index" ng-click="searchIndex()">Search Index</button>
+        <div class="checkbox" ng-repeat="(key, val) in indexedFile track by $index" ng-if="indexedFile.length">
+          <label><input type="checkbox" id={{val}}  ng-click="checked(val)">{{val}}</label>
+        </div>
       </div>
     <!-- Upload class section end -->
     <!-- Created Index Table section -->
@@ -87,23 +85,25 @@
     <!-- Search Index Section table start-->
         <div class="table-display" id="search-index" ng-if="showSearchTable">
         <br><br>
-        <h4 style="text-align: center; font-weight: bold">Search results Table</h4>
+        <h4 style="text-align: center; font-weight: bold">Search results Table(s)</h4>
+        <div ng-repeat="(key, values) in searchResult">
           <table class="table table-bordered table-responsive">
             <thead>
               <tr>
-                <th style="text-align: center">Search Terms</th>
-                <th ng-repeat="book in content" style="text-align: center">{{book.title}}</th>
+                <th style="text-align: center">{{key}}</th>
+                <th ng-repeat="doc in docsInFile(key)" style="text-align: center">{{doc.title}}</th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="(key, values) in searchResult">
-                <td style="text-align: center">{{key}}</td>
-                <td ng-repeat="item in content track by $index" style="text-align: center">
-                  <span ng-if="values.includes($index)" class="glyphicon">&#xe013;</span>
+              <tr ng-repeat="(keys, val) in values">
+                <td style="text-align: center">{{keys}}</td>
+                <td ng-repeat="(num, docs) in docsInFile(key)" style="text-align: center">
+                  <span ng-if="values[keys].includes(num)" class="glyphicon">&#xe013;</span>
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     <!-- Search Index Section table end-->

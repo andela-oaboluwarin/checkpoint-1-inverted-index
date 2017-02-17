@@ -91,18 +91,20 @@ class InvertedIndex {
 
   /**
    * @param{String} searchQuery - Words to search for
-   * @param{String} filename - Index to query
+   * @param{Array} fileName - Index to query
    * @return{Object} searchResult - Maps searched words to document locations
    */
-  searchIndex(searchQuery, filename) {
+  searchIndex(searchQuery, fileName) {
+    fileName = fileName || Object.keys(this.index);
     const searchResult = {};
     const searchTerms = InvertedIndex.distinctWords(searchQuery);
-    searchTerms.forEach((word) => {
-      if (this.index[filename][word]) {
-        searchResult[word] = this.index[filename][word];
-      } else {
-        searchResult[word] = {};
-      }
+    fileName.forEach((current) => {
+      searchResult[current] = {};
+      searchTerms.forEach((term) => {
+        if (term in this.index[current]) {
+          searchResult[current][term] = this.index[current][term];
+        }
+      });
     });
     return searchResult;
   }

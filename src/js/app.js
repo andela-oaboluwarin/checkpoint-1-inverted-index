@@ -7,6 +7,7 @@ const invertedApp = angular
     $scope.showIndex = false;
     $scope.indexedFile = [];
     $scope.file = [];
+    $scope.checkedBox = [];
     const newIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
@@ -75,12 +76,10 @@ const invertedApp = angular
         modalMessage('Select a file before creating an index');
       }
       $scope.content = $scope.filesBank[uploadedFile].content;
-      console.log('content------', $scope.content);
       const filename = $scope.filesBank[uploadedFile].name;
       if (!$scope.indexedFile.includes(filename)) {
         newIndex.createIndex(filename, $scope.content);
         $scope.index = newIndex.getIndex(filename);
-        console.log('Otoloye', $scope.index);
         $scope.indexedFile.push(filename);
         $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
       } else {
@@ -89,29 +88,35 @@ const invertedApp = angular
       indexTableDisplay();
     };
 
+    $scope.checked = (val) => {
+      if ($scope.checkedBox.includes(val)) {
+        $scope.checkedBox.splice($scope.checkedBox.indexOf(val), 1);
+      } else {
+        $scope.checkedBox.push(val);
+      }
+    };
+
+    $scope.docsInFile = (fileName) => {
+      for (let xl = 0; xl <= $scope.filesBank.length; xl += 1) {
+        if ($scope.filesBank[xl].name === fileName) {
+          return $scope.filesBank[xl].content;
+        }
+      }
+    };
+
     $scope.searchIndex = () => {
       $scope.showIndex = false;
-      const uploadedFile = $scope.selectedFile;
-      const filename = $scope.indexedFile;
-        // 'FileBank' ? null : $scope.filesBank[uploadedFile].name;
+      $scope.searchResult = {};
+      $scope.showSearchTable = true;
+
       if ($scope.searchQuery === undefined) {
         modalMessage('Please enter a search word');
-        $scope.searchResult = {};
-        console.log('gghghghhj', $scope.searchResult);
         return false;
       }
-      if (!filename && $scope.searchQuery) {
-        $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
-        $scope.multipleSearchTable = true;
+      if ($scope.checkedBox.length > 0) {
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery, $scope.checkedBox);
       } else {
-        $scope.showSearchTable = true;
-        $scope.file = [];
-        $scope.file.push(filename);
-        const searchObject = $scope.createdIndex;
-        $scope.bookTitle = searchObject;
-        $scope.noOfBook = new Array(searchObject.length);
-        $scope.searchResult = newIndex.searchIndex($scope.searchQuery, $scope.file);
-        console.log('reality dawns', $scope.searchResult);
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
       }
     };
   });
