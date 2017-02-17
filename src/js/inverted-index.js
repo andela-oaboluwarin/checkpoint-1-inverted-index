@@ -23,6 +23,22 @@ class InvertedIndex {
   }
 
   /**
+   * @param {any} fileContent - content of file to search.
+   * @return {Boolean} - return true or false
+   * @memberOf InvertedIndex
+   */
+  static isValidFile(fileContent) {
+    let check = true;
+    if (fileContent.length > 0 &&
+      fileContent[0].title && fileContent[0].text) {
+      check = true;
+    } else {
+      check = false;
+    }
+    return check;
+  }
+
+  /**
    * Method that ensures words appear only once
    * @param{String} words - The string to be filtered
    * @return{Array} tokens - Without duplicated words
@@ -75,18 +91,20 @@ class InvertedIndex {
 
   /**
    * @param{String} searchQuery - Words to search for
-   * @param{String} indexToSearch - Index to query
+   * @param{Array} fileName - Index to query
    * @return{Object} searchResult - Maps searched words to document locations
    */
-  searchIndex(searchQuery, indexToSearch) {
+  searchIndex(searchQuery, fileName) {
+    fileName = fileName || Object.keys(this.index);
     const searchResult = {};
     const searchTerms = InvertedIndex.distinctWords(searchQuery);
-    searchTerms.forEach((word) => {
-      if (this.index[indexToSearch][word]) {
-        searchResult[word] = this.index[indexToSearch][word];
-      } else {
-        searchResult[word] = {};
-      }
+    fileName.forEach((fileInQuestion) => {
+      searchResult[fileInQuestion] = {};
+      searchTerms.forEach((term) => {
+        if (term in this.index[fileInQuestion]) {
+          searchResult[fileInQuestion][term] = this.index[fileInQuestion][term];
+        }
+      });
     });
     return searchResult;
   }

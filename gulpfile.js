@@ -4,6 +4,7 @@ const eslint = require('gulp-eslint');
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 const run = require('gulp-run');
+const karmaSync = require('browser-sync').create();
 
 // Default tasks
 gulp.task('default', ['browserSync', 'watch']);
@@ -48,4 +49,16 @@ gulp.task('browserify', () =>
 // Test task
 gulp.task('test', ['browserify'], () => {
   run('node_modules/karma/bin/karma start karma.conf.js --single-run').exec();
+});
+
+gulp.task('karmaSync', () => {
+  karmaSync.init({
+    server: {
+      baseDir: ['src/js', 'dist'],
+      index: 'spec.html'
+    },
+    port: 9876,
+    ui: false,
+    ghostMode: false
+  });
 });

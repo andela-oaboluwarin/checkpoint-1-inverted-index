@@ -4,7 +4,10 @@ const invertedApp = angular
     $scope.filenames = [];
     $scope.filesBank = [];
     $scope.createdIndex = [];
-    $scope.searchResult = {};
+    $scope.showIndex = false;
+    $scope.indexedFile = [];
+    $scope.file = [];
+    $scope.checkedBox = [];
     const newIndex = new InvertedIndex();
 
     const modalMessage = (msg) => {
@@ -63,6 +66,7 @@ const invertedApp = angular
     const indexTableDisplay = () => {
       $scope.showIndex = true;
       $scope.showSearchTable = false;
+      $scope.multipleSearchTable = false;
       $scope.noOfBook = new Array($scope.content.length);
     };
 
@@ -73,31 +77,46 @@ const invertedApp = angular
       }
       $scope.content = $scope.filesBank[uploadedFile].content;
       const filename = $scope.filesBank[uploadedFile].name;
-      newIndex.createIndex(filename, $scope.content);
-      $scope.index = newIndex.getIndex(filename);
-      $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
+      if (!$scope.indexedFile.includes(filename)) {
+        newIndex.createIndex(filename, $scope.content);
+        $scope.index = newIndex.getIndex(filename);
+        $scope.indexedFile.push(filename);
+        $scope.createdIndex.push($scope.filesBank[uploadedFile].name);
+      } else {
+        modalMessage('Index already created before!');
+      }
       indexTableDisplay();
+    };
+
+    $scope.checked = (val) => {
+      if ($scope.checkedBox.includes(val)) {
+        $scope.checkedBox.splice($scope.checkedBox.indexOf(val), 1);
+      } else {
+        $scope.checkedBox.push(val);
+      }
+    };
+
+    $scope.docsInFile = (fileName) => {
+      for (let xl = 0; xl <= $scope.filesBank.length; xl += 1) {
+        if ($scope.filesBank[xl].name === fileName) {
+          return $scope.filesBank[xl].content;
+        }
+      }
     };
 
     $scope.searchIndex = () => {
       $scope.showIndex = false;
+      $scope.searchResult = {};
       $scope.showSearchTable = true;
-      const uploadedFile = $scope.selectedFile;
-      const filename = uploadedFile ===
-        'FileBank' ? null : $scope.filesBank[uploadedFile].name;
+
       if ($scope.searchQuery === undefined) {
         modalMessage('Please enter a search word');
-        $scope.searchResult = {};
         return false;
       }
-      if (!filename) {
-        $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
+      if ($scope.checkedBox.length > 0) {
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery, $scope.checkedBox);
       } else {
-        const searchObject = $scope.filesBank[uploadedFile].content;
-        $scope.bookTitle = searchObject;
-        $scope.noOfBook = new Array(searchObject.length);
-        $scope.searchResult = newIndex.searchIndex($scope.searchQuery,
-          $scope.filesBank[uploadedFile].name);
+        $scope.searchResult = newIndex.searchIndex($scope.searchQuery);
       }
     };
   });
