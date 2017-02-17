@@ -98,11 +98,11 @@ class InvertedIndex {
     fileName = fileName || Object.keys(this.index);
     const searchResult = {};
     const searchTerms = InvertedIndex.distinctWords(searchQuery);
-    fileName.forEach((current) => {
-      searchResult[current] = {};
+    fileName.forEach((fileInQuestion) => {
+      searchResult[fileInQuestion] = {};
       searchTerms.forEach((term) => {
-        if (term in this.index[current]) {
-          searchResult[current][term] = this.index[current][term];
+        if (term in this.index[fileInQuestion]) {
+          searchResult[fileInQuestion][term] = this.index[fileInQuestion][term];
         }
       });
     });

@@ -123,46 +123,49 @@ describe('Inverted Index Suite', () => {
     });
 
     it('should return correct index document for each word', () => {
-      expect(newIndex.searchIndex('fellowship', 'goodBooks'))
-        .toEqual({ fellowship: [1] });
-      expect(newIndex.searchIndex('of', 'goodBooks')).toEqual({
-        of: [0, 1]
+      console.log('everything', newIndex.searchIndex('fellowship', ['goodBooks']));
+      expect(newIndex.searchIndex('fellowship', ['goodBooks']))
+        .toEqual({ goodBooks: ({ fellowship: [1] }) });
+      expect(newIndex.searchIndex('of', ['goodBooks'])).toEqual({
+        goodBooks: ({
+          of: [0, 1]
+        })
       });
-      expect(newIndex.searchIndex('discombobulated', 'goodBooks'))
+      expect(newIndex.searchIndex('discombobulated', ['goodBooks']))
         .toEqual({
-          discombobulated: {}
+          goodBooks: {}
         });
-      expect(newIndex.searchIndex('ring', 'goodBooks'))
-        .not.toBe({ ring: [0] });
-      expect(newIndex.searchIndex(multipleSearch,
-        'goodBooks')).toEqual({
-          destroy: [1],
-          world: [0],
-          imagination: [0],
-          quickly: {}
+      expect(newIndex.searchIndex('ring', ['goodBooks']))
+        .not.toBe({ goodBooks: ({ ring: [0] }) });
+      expect(newIndex.searchIndex(multipleSearch, ['goodBooks']))
+        .toEqual({
+          goodBooks: ({
+            destroy: [1],
+            imagination: [0],
+            world: [0],
+          })
         });
     });
 
 
     it('should return search result if an array is passed as term', () => {
       expect(newIndex.searchIndex(arraySearch,
-        'goodBooks')).toEqual({
-          be: {},
-          forever: {},
-          great: {},
-          wonderland: [0],
-          fellowship: [1],
-          and: [0, 1],
-          may: {}
+        ['goodBooks'])).toEqual({
+          goodBooks: ({
+            and: [0, 1],
+            fellowship: [1],
+            wonderland: [0],
+          })
         });
-      expect(newIndex.searchIndex(arraySearch, 'goodBooks')).not.toBe({
-        be: [1],
-        forever: [0, 1],
-        great: [0],
-        wonderland: [1],
-        fellowship: [0],
-        and: {},
-        may: [0, 1]
+      expect(newIndex.searchIndex(arraySearch, ['goodBooks'])).not.toBe({
+        goodBooks: ({
+          be: [1],
+          fellowship: [0],
+          forever: [0, 1],
+          great: [0],
+          may: [0, 1],
+          wonderland: [1]
+        })
       });
     });
   });
