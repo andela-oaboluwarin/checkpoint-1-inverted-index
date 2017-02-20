@@ -48,7 +48,7 @@
         <button type="button" class="btn btn-custom" id="upload-file" ng-click="uploadFile()">Upload File</button>
         <div class="spacer"></div>
         <select class="browser-default" id="filesBank" ng-model="selectedFile">
-          <option value='' disabled selected>Select file to index</option>
+          <option value="" disabled selected>Select file to index</option>
           <option value={{key}} ng-repeat="(key,value) in filesBank">{{value.name}}</option>
         </select>
         <button type="button" class="btn btn-custom" id="create-index" ng-click="createIndex()">Create Index</button>

@@ -66,7 +66,6 @@ const invertedApp = angular
     const indexTableDisplay = () => {
       $scope.showIndex = true;
       $scope.showSearchTable = false;
-      $scope.multipleSearchTable = false;
       $scope.noOfBook = new Array($scope.content.length);
     };
 
