@@ -10,7 +10,7 @@ describe('Inverted Index Suite', () => {
   const sampleSentence =
     'This be an %example of the #typical be sentence type.';
   const multipleSearch = 'Destroy world imagination quickly.';
-  const arraySearch = '[forever, wonderland] may be great and fellowship.';
+  const arraySearch = ['forever', 'wonderland may be great and fellowship.'];
 
   // Inverted Index class test suite
   describe('Class Inverted Index', () => {
@@ -97,7 +97,6 @@ describe('Inverted Index Suite', () => {
     });
 
     it('should return correct index document for each word', () => {
-      console.log('everything', newIndex.searchIndex('fellowship', ['goodBooks']));
       expect(newIndex.searchIndex('fellowship', ['goodBooks']))
         .toEqual({ goodBooks: ({ fellowship: [1] }) });
       expect(newIndex.searchIndex('of', ['goodBooks'])).toEqual({

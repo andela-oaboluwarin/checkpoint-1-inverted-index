@@ -94,7 +94,9 @@ class InvertedIndex {
    * @param{Array} fileName - Index to query
    * @return{Object} searchResult - Maps searched words to document locations
    */
-  searchIndex(searchQuery, fileName) {
+	searchIndex(searchQuery, fileName) {
+		searchQuery = searchQuery.toString();
+		console.log(searchQuery);
     fileName = fileName || Object.keys(this.index);
     const searchResult = {};
     const searchTerms = InvertedIndex.distinctWords(searchQuery);
